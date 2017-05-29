@@ -1,16 +1,18 @@
 import git, os, shutil
 from . import files, config
 
-GIT_CHECKOUT = 'git@{provider}:{user}/{project}.git'
-HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
+def library_cache(root):
+    return files.canonical(root or config.root)
 
 
 def clear_library_cache(root=None):
     """Clear gitty's cache."""
-    shutil.rmtree(root or config.root(), ignore_errors=True)
+    shutil.rmtree(library_cache(root), ignore_errors=True)
 
 
 class Library(object):
+    GIT_CHECKOUT = 'git@{provider}:{user}/{project}.git'
+    HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
 
     def __init__(self, provider, user, project,
                  branch='master', commit=None, root=None):
@@ -19,7 +21,7 @@ class Library(object):
         self.project = project
         self.branch = branch
         self.commit = commit
-        self.root = root or config.root()
+        self.root = library_cache(root)
 
         path = [self.root, provider, user, project, commit or branch]
         path = (files.sanitize(p) for p in path)
@@ -48,8 +50,8 @@ class Library(object):
                     repo.head.reset(self.commit, index=True, working_tree=True)
 
             try:
-                load_at(GIT_CHECKOUT)
+                load_at(self.GIT_CHECKOUT)
             except:
-                load_at(HTTPS_CHECKOUT)
+                load_at(self.HTTPS_CHECKOUT)
 
             return True

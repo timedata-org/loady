@@ -1,7 +1,7 @@
 import os
 
+NOLOAD = os.environ.get('GITTY_NOLOAD')
+PATH = os.environ.get('GITTY_PATH', '')
 ROOT = os.environ.get('GITTY_ROOT', '~/.gitty')
 
-
-def root():
-    return os.path.abspath(os.path.expanduser(ROOT))
+del os

@@ -1,6 +1,7 @@
 import contextlib, sys
-from . import library
+from . import config, library
 
+ORIGINAL_SYS_PATH = sys.path[:]
 GIT_INTRO = '//git/'
 
 
@@ -19,18 +20,16 @@ def resolve(path, root=None):
     return lib.path
 
 
-def extend(paths, root=None):
+def extend(paths=None, root=None):
     """Extend sys.path by the resolved paths."""
-    try:
-        paths = (paths or '').split(':')
-    except:
-        pass
+    if paths is None:
+        paths = config.PATH.split(':')
 
-    sys.path.extend(resolve(p, root=root) for p in split(paths))
+    sys.path.extend(resolve(p, root=root) for p in paths)
 
 
 @contextlib.contextmanager
-def extender(paths, root=None):
+def extender(paths=None, root=None):
     """A context that extends sys.path and reverts it after the context is
        complete."""
     old_path = sys.path[:]
@@ -40,3 +39,7 @@ def extender(paths, root=None):
         yield
     finally:
         sys.path = old_path
+
+
+if not config.NO_LOAD:
+    extend()
