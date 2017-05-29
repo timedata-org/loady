@@ -1,7 +1,8 @@
 import git, os, shutil
 from . import files, config
 
-def library_cache(root):
+
+def library_cache(root=None):
     return files.canonical(root or config.root)
 
 
@@ -15,7 +16,7 @@ class Library(object):
     HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
 
     def __init__(self, provider, user, project,
-                 branch='master', commit=None, root=None):
+                 branch='master', commit=None, *, root=None):
         self.provider = provider
         self.user = user
         self.project = project
@@ -30,28 +31,28 @@ class Library(object):
     def pull(self):
         git.Repo(self.path).remote().pull(self.branch)
 
-    def load(self, force_reload=False):
+    def load(self):
         """Load a library.  Returns true if the library was loaded or reloaded,
            false if the library already existed."""
         if os.path.exists(self.path):
-            if not force_reload:
+            if not config.NOCACHE:
                 return False
             shutil.rmtree(self.path)
 
         with files.remove_on_exception(self.path):
-            def load_at(address):
-                url = address.format(**vars(self))
-                repo = git.Repo.init(self.path)
-                origin = repo.create_remote('origin', url)
-                origin.fetch()
-                origin.pull(self.branch)
-
-                if self.commit:
-                    repo.head.reset(self.commit, index=True, working_tree=True)
-
             try:
-                load_at(self.GIT_CHECKOUT)
+                self._load(self.GIT_CHECKOUT)
             except:
-                load_at(self.HTTPS_CHECKOUT)
+                self._load(self.HTTPS_CHECKOUT)
 
             return True
+
+    def _load(self, address):
+        url = address.format(**vars(self))
+        repo = git.Repo.init(self.path)
+        origin = repo.create_remote('origin', url)
+        origin.fetch()
+        origin.pull(self.branch)
+
+        if self.commit:
+            repo.head.reset(self.commit, index=True, working_tree=True)

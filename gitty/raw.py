@@ -4,7 +4,7 @@ PROVIDERS = {
 }
 
 
-def raw_url(url, providers=PROVIDERS):
+def raw(url, providers=PROVIDERS):
     """Return a raw version of the URL if there is one.
     Otherwise, it returns the original URL.
 
@@ -35,9 +35,35 @@ def raw_url(url, providers=PROVIDERS):
     return '/'.join(parts)
 
 
+def request(url, providers=PROVIDERS, json=True):
+    """Return data at the raw version of a URL, or raise an exception.
+
+    If the URL ends in .json and json=True, convert the data from JSON.
+    """
+    try:
+        import requests
+
+    except ImportError as e:
+        e.args += (_REQUESTS_ERROR, )
+        raise
+
+    r = requests.get(raw(url))
+    if not r.ok:
+        raise ValueError('Couldn\'t read %s with code %s:\n%s' %
+                         url, r.status_code, r.text)
+    return r.json if json and url.endswith('.json') else r.text
+
+
+_REQUESTS_ERROR = """\
+You need to import the requests library.  Try typing:
+
+    pip import requests
+
+at the command line.
 """
 
-Motivating examples were:
+
+"""Motivating examples were:
 
 https://github.com /ManiacalLabs/BiblioPixel /blob /master/tox.ini
 https://raw.githubusercontent.com /ManiacalLabs/BiblioPixel /master/tox.ini
