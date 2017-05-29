@@ -1,28 +1,27 @@
 import git, os, shutil
-from . import files
+from . import files, config
 
-CHECKOUT_ROOT = os.path.expanduser('~/.gitty')
 GIT_CHECKOUT = 'git@{provider}:{user}/{project}.git'
 HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
 
 
-
-def clear_cache(cache_files=CHECKOUT_ROOT):
-    shutil.rmtree(cache_files, ignore_errors=True)
+def clear_library_cache(root=None):
+    """Clear gitty's cache."""
+    shutil.rmtree(root or config.root(), ignore_errors=True)
 
 
 class Library(object):
 
     def __init__(self, provider, user, project,
-                 branch='master', commit=None, root=CHECKOUT_ROOT):
+                 branch='master', commit=None, root=None):
         self.provider = provider
         self.user = user
         self.project = project
         self.branch = branch
         self.commit = commit
-        self.root = root
+        self.root = root or config.root()
 
-        path = [root, provider, user, project, commit or branch]
+        path = [self.root, provider, user, project, commit or branch]
         path = (files.sanitize(p) for p in path)
         self.path = os.path.join(*path)
 
