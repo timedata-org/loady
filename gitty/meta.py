@@ -1,16 +1,32 @@
-import importlib.abc, sys
+import importlib.abc, importlib.machinery, sys
 
 
-class TestFinder(importlib.abc.MetaPathFinder):
-    def __init__(self, prefix='gitty.imp'):
-        self.prefix = prefix
+class RedirectFinder(importlib.machinery.PathFinder):
+    def __init__(self, name, path):
+        self.name = name
+        assert not name.endswith('.')
+        self.path = path
 
     def find_spec(self, fullname, paths, target=None):
-        if fullname.startswith('gitty.imp'):
-            print(fullname, paths, target)
+        print('!!', self.name, fullname, paths, target)
+        if fullname == self.name:
+            res = super().find_spec(fullname, paths, target=target)
+            print('!!??', res)
+            return res
 
+class TestLoader(importlib.abc.SourceLoader):
+    pass
+
+
+# class TestFinder(importlib.abc.MetaPathFinder):
 
 def install():
-    if sys.meta_path and isinstance(sys.meta_path[0], TestFinder):
-        sys.meta_path.pop(0)
-    sys.meta_path.insert(0, TestFinder())
+    f = RedirectFinder('gitty.remote', '/development/gitty/gitty/test')
+    sys.meta_path.insert(0, f)
+
+
+
+if __name__ == '__main__':
+    install()
+    from gitty.remote import toast
+    print(toast.TOAST)
