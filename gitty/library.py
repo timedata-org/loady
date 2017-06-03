@@ -1,14 +1,14 @@
 import git, os, shutil
-from . import files, config
+from . import config, files
 
 
 def clear_library_cache(prompt=True):
     """Clear gitty's cache."""
     if prompt:
-        answer = input('Clear library cache at %s? (yN)' + config.root())
+        answer = input('Clear library cache at %s? (yN)' + config.cache())
         if not answer.startswith('y'):
             return False
-    shutil.rmtree(config.root(), ignore_errors=True)
+    shutil.rmtree(config.cache(), ignore_errors=True)
     return True
 
 
@@ -23,7 +23,7 @@ class Library(object):
         self.branch = branch
         self.commit = commit
 
-        path = [library_cache(), provider, user, project, commit or branch]
+        path = [config.cache(), provider, user, project, commit or branch]
         path = [files.sanitize(p) for p in path]
         self.path = os.path.join(*path)
 

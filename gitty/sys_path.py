@@ -4,11 +4,15 @@ from . import config, library
 ORIGINAL_SYS_PATH = sys.path[:]
 
 
-def resolve(subpath):
-    """Resolve from a git path.
+def load(gitpath):
+    """Load a class at a git path
 
     @returns the file path to the code."""
-    lib = library.Library(*subpath.split('/', 5))
+    try:
+        lib = library.Library(*gitpath.split('/'))
+    except Exception as e:
+        e.msg += ('for gitpath ' + gitpath,)
+        raise
 
     if not lib.load():
         lib.pull()
@@ -20,7 +24,7 @@ def extend(path=None):
     """Extend sys.path by the resolved paths."""
     if path is None:
         path = config.PATH.split(':')
-    sys.path.extend(resolve(p) for p in path)
+    sys.path.extend(load(p) for p in path)
 
 
 @contextlib.contextmanager
