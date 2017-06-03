@@ -1,41 +1,42 @@
-PROVIDERS = {
-    'github.com': ('raw.githubusercontent.com', ),
-    'gitlab.com': ('gitlab.com', '/raw'),
+URL_REWRITERS = {
+    'github.com': {
+        'provider': 'raw.githubusercontent.com',
+        'path': [],
+    },
+    'gitlab.com': {
+        'provider': 'gitlab.com',
+        'path': ['/raw'],
+    },
 }
 
 
-def raw(url, providers=PROVIDERS):
+def raw(url, url_rewriters=URL_REWRITERS):
     """Return a raw version of the URL if there is one.
-    Otherwise, it returns the original URL.
+    Otherwise returns the original URL.
 
     Many repos have "raw" and "user-friendly" versions of each URL.  Usually
     when you want to download something programmatically, you want the raw
-    version, but users will want to enter the user-friendly version.
+    version, but users will enter the user-friendly version as it is the one
+    they usually see.
 
-    In those cases this functions converts the user-friendly URL into the raw
-    one - otherwise it returns the original URL.
+    If this function recognizes one of those cases, it converts the
+    user-friendly URL into the raw - otherwise it returns the original URL.
 
-    The function works by default for two providers: github and gitlab.
-    You can use others by passing in your own providers list.
+    The function works by default for two git providers: github and gitlab.
+    You can use others by passing in your own url_rewriters list.
     """
-    try:
-        # https: /        /github.com/user/project/blob / master/tox.ini
-        protocol, nothing, provider, user, project, sep, *rest = url.split('/')
-        raw_provider, *path = providers[provider]
+    # https: /     /github.com/user/ project/ blob/ master/tox.ini
+    protocol, empty, provider, user, project, _, *rest = url.split('/')
+    rewriter = url_rewriters.get(provider)
 
-    except:
-        # Not as we expected.
-        return url
+    if protocol and (not empty) and user and project and rest and rewriter:
+        parts = [protocol, empty, rewriter['provider'], user, project]
+        return '/'.join(parts + rewriter['path'] + rest)
 
-    if nothing or not (protocol and user and project and sep and rest):
-        # Not as we expected.
-        return url
-
-    parts = [protocol, nothing, raw_provider, user, project] + path + rest
-    return '/'.join(parts)
+    return url
 
 
-def request(url, providers=PROVIDERS, json=True):
+def request(url, url_rewriters=URL_REWRITERS, json=True):
     """Return data at the raw version of a URL, or raise an exception.
 
     If the URL ends in .json and json=True, convert the data from JSON.
@@ -47,7 +48,7 @@ def request(url, providers=PROVIDERS, json=True):
         e.args += (_REQUESTS_ERROR, )
         raise
 
-    r = requests.get(raw(url))
+    r = requests.get(raw(url, url_rewriters))
     if not r.ok:
         raise ValueError('Couldn\'t read %s with code %s:\n%s' %
                          url, r.status_code, r.text)
@@ -61,7 +62,6 @@ You need to import the requests library.  Try typing:
 
 at the command line.
 """
-
 
 """Motivating examples were:
 
