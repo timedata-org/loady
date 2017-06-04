@@ -1,10 +1,10 @@
 import os
 from . import files
 
-NOCACHE = os.environ.get('GITTY_NOCACHE', False)
+CACHE_DISABLE = os.environ.get('GITTY_CACHE_DISABLE', False)
 PATH = os.environ.get('GITTY_PATH', '')
-CACHE = os.environ.get('GITTY_CACHE', '~/.gitty')
+CACHE_DIRECTORY = os.environ.get('GITTY_CACHE_DIRECTORY', '~/.gitty')
 
 
 def cache():
-    return files.canonical(CACHE)
+    return files.canonical(CACHE_DIRECTORY)

@@ -34,7 +34,7 @@ class Library(object):
         """Load a library.  Returns true if the library was loaded or reloaded,
            false if the library already existed."""
         if os.path.exists(self.path):
-            if not config.NOCACHE:
+            if not config.CACHE_DISABLE:
                 return False
             shutil.rmtree(self.path)
 
