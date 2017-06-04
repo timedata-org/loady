@@ -5,7 +5,7 @@ URL_REWRITERS = {
     },
     'gitlab.com': {
         'provider': 'gitlab.com',
-        'path': ['/raw'],
+        'path': ['raw'],
     },
 }
 
@@ -26,7 +26,11 @@ def raw(url, url_rewriters=URL_REWRITERS):
     You can use others by passing in your own url_rewriters list.
     """
     # https: /     /github.com/user/ project/ blob/ master/tox.ini
-    protocol, empty, provider, user, project, _, *rest = url.split('/')
+    try:
+        protocol, empty, provider, user, project, _, *rest = url.split('/')
+    except:
+        return url
+
     rewriter = url_rewriters.get(provider)
 
     if protocol and (not empty) and user and project and rest and rewriter:
@@ -43,7 +47,6 @@ def request(url, url_rewriters=URL_REWRITERS, json=True):
     """
     try:
         import requests
-
     except ImportError as e:
         e.args += (_REQUESTS_ERROR, )
         raise
@@ -61,20 +64,4 @@ You need to import the requests library.  Try typing:
     pip import requests
 
 at the command line.
-"""
-
-"""Motivating examples were:
-
-https://github.com /ManiacalLabs/BiblioPixel /blob /master/tox.ini
-https://raw.githubusercontent.com /ManiacalLabs/BiblioPixel /master/tox.ini
-
-https://github.com /ManiacalLabs/BiblioPixel /blob /dev/test/project.json
-https://raw.githubusercontent.com /ManiacalLabs/BiblioPixel /dev/test/project.json
-
-https://gitlab.com/ase/ase /blob /fix_wannier/doc/Makefile
-https://gitlab.com/ase/ase /raw /fix_wannier/doc/Makefile
-
-https://gitlab.com/ase/ase /blob /master/ase/geometry/distance.py
-https://gitlab.com/ase/ase /raw /master/ase/geometry/distance.py
-
 """
