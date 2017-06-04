@@ -1,17 +1,22 @@
 # gitty
 
-A library to load Python code and raw text from git repositories.
+Dynamically load Python libraries, JSON and raw text from git repositories.
 
 # Basic usage
 
     import gitty
 
     # Permanently extend sys path with this github repo.
-    gitty.sys_path.extend(['github.com/timedata-org/simple']):
+    gitty.extend_sys_path('//git/github.com/timedata-org/simple'):
 
-    from simple import basic
-    basic.run(basic.FOO, basic.BAR)
+    # Temporarily extend sys path with this github repo.
+    with gitty.sys_path.extender('//git/github.com/timedata-org/simple'):
+        # Do stuff.
 
-    with gitty.sys_path.extender():
+    # Get raw data from URLs.
+    result = gitty.raw.request(
+        'https://github.com/timedata-org/simple/blob/master/simple.json')
 
-    with gitty.
+    # Actualy gets the raw data from this URL:
+    # https://raw.githubusercontent.com/timedata-org/simple/master/simple.json
+    # and reads it as JSON.

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
-VERSION = 0.9
+VERSION = 1.0
 
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
@@ -25,7 +25,8 @@ class RunTests(TestCommand):
 setup(
     name='Gitty',
     version=VERSION,
-    description=('Gitty lets you load Python libraries dynamically from git'),
+    description=('Gitty lets you load Python libraries, JSON and raw text '+
+                 'dynamically from git'),
     author='Tom Ritchford',
     author_email='tom@swirly.com',
     url='http://github.com/timedata-org/bibliopixel/',
@@ -42,7 +43,5 @@ setup(
         'test': RunTests,
     },
     include_package_data=True,
-    install_requires=[
-        'GitPython',
-    ]
+    install_requires=['GitPython'],
 )
