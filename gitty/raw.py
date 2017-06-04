@@ -1,3 +1,5 @@
+import requests
+
 URL_REWRITERS = {
     'github.com': {
         'provider': 'raw.githubusercontent.com',
@@ -45,23 +47,8 @@ def request(url, url_rewriters=URL_REWRITERS, json=True):
 
     If the URL ends in .json and json=True, convert the data from JSON.
     """
-    try:
-        import requests
-    except ImportError as e:
-        e.args += (_REQUESTS_ERROR, )
-        raise
-
     r = requests.get(raw(url, url_rewriters))
     if not r.ok:
         raise ValueError('Couldn\'t read %s with code %s:\n%s' %
                          url, r.status_code, r.text)
     return r.json if json and url.endswith('.json') else r.text
-
-
-_REQUESTS_ERROR = """\
-You need to import the requests library.  Try typing:
-
-    pip import requests
-
-at the command line.
-"""

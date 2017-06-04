@@ -29,7 +29,8 @@ setup(
                  'dynamically from git'),
     author='Tom Ritchford',
     author_email='tom@swirly.com',
-    url='http://github.com/timedata-org/bibliopixel/',
+    url='http://github.com/timedata-org/gitty/',
+    download_url='http://github.com/timedata-org/gitty/archive/1.0.tar.gz',
     license='MIT',
     packages=find_packages(exclude=['test']),
     classifiers=[
@@ -39,9 +40,8 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     tests_require=['pytest'],
-    cmdclass={
-        'test': RunTests,
-    },
+    cmdclass={'test': RunTests},
+    keywords=['git', 'import'],
     include_package_data=True,
-    install_requires=['GitPython'],
+    install_requires=['GitPython', 'requests'],
 )
