@@ -14,6 +14,7 @@ class RedirectFinder(importlib.machinery.PathFinder):
             print('!!??', res)
             return res
 
+
 class TestLoader(importlib.abc.SourceLoader):
     pass
 
@@ -23,7 +24,6 @@ class TestLoader(importlib.abc.SourceLoader):
 def install():
     f = RedirectFinder('gitty.remote', '/development/gitty/gitty/test')
     sys.meta_path.insert(0, f)
-
 
 
 if __name__ == '__main__':
