@@ -13,6 +13,8 @@ def clear_library_cache(prompt=True):
 
 
 class Library(object):
+    """Represents a single Python library loaded from a git repository."""
+
     GIT_CHECKOUT = 'git@{provider}:{user}/{project}.git'
     HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
 

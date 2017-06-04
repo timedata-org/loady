@@ -2,11 +2,14 @@ import contextlib, os, re, shutil, unicodedata
 
 
 def canonical(filename):
+    """Given a filename, return an absolute path with usenames expanded."""
+
     return os.path.abspath(os.path.expanduser(filename))
 
 
 def sanitize(value):
     """Strips all undesirable characters out of potential file paths."""
+
     # From https://stackoverflow.com/a/295466/43839, except that we allow
     # the / character because we accept file paths.
     value = unicodedata.normalize('NFKD', value)

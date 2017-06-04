@@ -5,7 +5,7 @@ ORIGINAL_SYS_PATH = sys.path[:]
 
 
 def load(gitpath):
-    """Load a class at a git path
+    """Load a Python library from a git path.
 
     @returns the file path to the code."""
     try:
@@ -14,14 +14,12 @@ def load(gitpath):
         e.msg += ('for gitpath ' + gitpath,)
         raise
 
-    if not lib.load():
-        lib.pull()
-
+    lib.load() or lib.pull()
     return lib.path
 
 
 def extend(path=None):
-    """Extend sys.path by the resolved paths."""
+    """Extend sys.path by a list of git paths."""
     if path is None:
         path = config.PATH.split(':')
     sys.path.extend(load(p) for p in path)
@@ -29,8 +27,8 @@ def extend(path=None):
 
 @contextlib.contextmanager
 def extender(path=None):
-    """A context that extends sys.path and reverts it after the context is
-       complete."""
+    """A context that temporarily extends sys.path and reverts it after the
+       context is complete."""
     old_path = sys.path[:]
     extend(path=path)
 
