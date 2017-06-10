@@ -14,7 +14,7 @@ def sanitize(value):
     # the / character because we accept file paths.
     value = unicodedata.normalize('NFKD', value)
     value = value.strip().lower()
-    value = re.sub('[^/\w\s-]', '', value)
+    value = re.sub('[^./\w\s-]', '', value)
     value = re.sub('[-\s]+', '-', value)
 
     return value
