@@ -10,11 +10,9 @@ def canonical(filename):
 def sanitize(value):
     """Strips all undesirable characters out of potential file paths."""
 
-    # From https://stackoverflow.com/a/295466/43839, except that we allow
-    # the / character because we accept file paths.
     value = unicodedata.normalize('NFKD', value)
-    value = value.strip().lower()
-    value = re.sub('[^/\w\s-]', '', value)
+    value = value.strip()
+    value = re.sub('[^./\w\s-]', '', value)
     value = re.sub('[-\s]+', '-', value)
 
     return value
