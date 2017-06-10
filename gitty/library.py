@@ -5,7 +5,8 @@ from . import config, files
 def clear_library_cache(prompt=True):
     """Clear gitty's cache."""
     if prompt:
-        answer = input('Clear library cache at %s? (yN)' + config.cache())
+        answer = input(
+            'Clear library cache files in %s/? (yN) ' % config.cache())
         if not answer.startswith('y'):
             return False
     shutil.rmtree(config.cache(), ignore_errors=True)
