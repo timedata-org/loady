@@ -16,9 +16,7 @@ def clear_library_cache(prompt=True):
 class Library(object):
     """Represents a single Python library loaded from a git repository."""
 
-    GIT_CHECKOUT = 'git@{provider}:{user}/{project}.git'
-    HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
-    USE_GIT_CHECKOUT = False
+    CHECKOUT = 'https://:@{provider}/{user}/{project}.git'
 
     def __init__(self, provider, user, project, branch='master', commit=None):
         self.provider = provider
@@ -39,22 +37,12 @@ class Library(object):
            false if the library already existed."""
         if os.path.exists(self.path):
             if not config.CACHE_DISABLE:
-                return
+                return False
             shutil.rmtree(self.path, ignore_errors=True)
 
         with files.remove_on_exception(self.path):
-            if self.USE_GIT_CHECKOUT:
-                try:
-                    self._load(self.GIT_CHECKOUT)
-                    return True
-                except:
-                    pass
-
-            self._load(self.HTTPS_CHECKOUT)
+            url = self.CHECKOUT.format(**vars(self))
+            repo = git.Repo.clone_from(url=url, to_path=self.path, b=self.branch)
+            if self.commit:
+                repo.head.reset(self.commit, index=True, working_tree=True)
             return True
-
-    def _load(self, address):
-        url = address.format(**vars(self))
-        repo = git.Repo.clone_from(url=url, to_path=self.path, b=self.branch)
-        if self.commit:
-            repo.head.reset(self.commit, index=True, working_tree=True)
