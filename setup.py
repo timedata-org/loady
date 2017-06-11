@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import sys
 
-VERSION = 1.0
+VERSION = 1.1
 
 
 # From here: http://pytest.org/2.2.4/goodpractises.html
@@ -30,7 +30,7 @@ setup(
     author='Tom Ritchford',
     author_email='tom@swirly.com',
     url='http://github.com/timedata-org/gitty/',
-    download_url='http://github.com/timedata-org/gitty/archive/1.0.tar.gz',
+    download_url='http://github.com/timedata-org/gitty/archive/1.1.tar.gz',
     license='MIT',
     packages=find_packages(exclude=['test']),
     classifiers=[
