@@ -18,6 +18,7 @@ class Library(object):
 
     GIT_CHECKOUT = 'git@{provider}:{user}/{project}.git'
     HTTPS_CHECKOUT = 'https://{provider}/{user}/{project}.git'
+    USE_GIT_CHECKOUT = False
 
     def __init__(self, provider, user, project, branch='master', commit=None):
         self.provider = provider
@@ -38,23 +39,22 @@ class Library(object):
            false if the library already existed."""
         if os.path.exists(self.path):
             if not config.CACHE_DISABLE:
-                return False
-            shutil.rmtree(self.path)
+                return
+            shutil.rmtree(self.path, ignore_errors=True)
 
         with files.remove_on_exception(self.path):
-            try:
-                self._load(self.GIT_CHECKOUT)
-            except:
-                self._load(self.HTTPS_CHECKOUT)
+            if self.USE_GIT_CHECKOUT:
+                try:
+                    self._load(self.GIT_CHECKOUT)
+                    return True
+                except:
+                    pass
 
+            self._load(self.HTTPS_CHECKOUT)
             return True
 
     def _load(self, address):
         url = address.format(**vars(self))
-        repo = git.Repo.init(self.path)
-        origin = repo.create_remote('origin', url)
-        origin.fetch()
-        origin.pull(self.branch)
-
+        repo = git.Repo.clone_from(url=url, to_path=self.path, b=self.branch)
         if self.commit:
             repo.head.reset(self.commit, index=True, working_tree=True)

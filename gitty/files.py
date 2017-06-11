@@ -27,5 +27,5 @@ def remove_on_exception(dirname, remove=True):
         yield
     except:
         if remove:
-            shutil.rmtree(dirname)
+            shutil.rmtree(dirname, ignore_errors=True)
         raise
