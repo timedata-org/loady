@@ -38,7 +38,7 @@ def extend(path=None, prefix=PREFIX):
 
 
 @contextlib.contextmanager
-def extender(path=None):
+def extender(path=None, prefix=PREFIX):
     """A context that temporarily extends sys.path and reverts it after the
        context is complete."""
     old_path = sys.path[:]
