@@ -1,5 +1,10 @@
-import git, os, shutil
+import os, shutil
 from . import config, files
+
+try:
+    import git
+except:
+    git = None
 
 
 def clear_library_cache(prompt=True):
@@ -30,11 +35,18 @@ class Library(object):
         self.path = os.path.join(*path)
 
     def pull(self):
+        """
+        Pull the git repo from its origin.  Can only be called after load()
+        has been called.
+        """
         git.Repo(self.path).remote().pull(self.branch)
 
     def load(self):
         """Load a library.  Returns true if the library was loaded or reloaded,
            false if the library already existed."""
+        if not git:
+            raise EnvironmentError(MISSING_GIT_ERROR)
+
         if os.path.exists(self.path):
             if not config.CACHE_DISABLE:
                 return False
@@ -46,3 +58,13 @@ class Library(object):
             if self.commit:
                 repo.head.reset(self.commit, index=True, working_tree=True)
             return True
+
+
+MISSING_GIT_ERROR = """
+Unable to load the Python library GitPython.  The cause might be that
+the program git is not installed on your computer.
+
+Try installing git using these instructions:
+
+    https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+"""
