@@ -25,7 +25,7 @@ class RunTests(TestCommand):
 setup(
     name='Gitty',
     version=VERSION,
-    description=('Gitty lets you load Python libraries, JSON and raw text '+
+    description=('Gitty lets you load Python libraries, JSON and raw text ' +
                  'dynamically from git'),
     author='Tom Ritchford',
     author_email='tom@swirly.com',
