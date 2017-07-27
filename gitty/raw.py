@@ -31,23 +31,16 @@ def raw(url, url_rewriters=URL_REWRITERS):
 
     There is also a special case for Github gists.
     """
-    print('!!!!!!!!!!!!!!!!')
     try:
         # If it's a user-friendly gist URL, get the real data by parsing
         # the file.
         parts = url.split('/')
         if parts[2] == 'gist.github.com' and '.' not in parts[:-1]:
-            print('!here!!!', parts)
             soup = BeautifulSoup(requests.get(url).text, 'html.parser')
-            print('2.')
             raw_links = [i for i in soup.find_all('a') if i.text == 'Raw']
-            print('3.', raw_links)
             return ('https://gist.githubusercontent.com' +
                     raw_links[0].attrs['href'])
-        else:
-            print('OOPS', parts)
     except Exception as e:
-        print('???', e)
         pass
 
     # https: /     /github.com/user/ project/ blob/ master/tox.ini
