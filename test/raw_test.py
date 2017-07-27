@@ -13,6 +13,10 @@ class RawTest(unittest.TestCase):
 
 
 EXAMPLES = (
+    ('https://gist.github.com/rec/adb4bc48080a6505e73b945c1178f614',
+     'https://gist.githubusercontent.com/rec/adb4bc48080a6505e73b945c1178f614'
+     '/raw/55c99dbc774be86a1ec163c244a4ef94c31b5420/larsen-scanner.json'),
+
     ('https://github.com/ManiacalLabs/BiblioPixel/blob/master/tox.ini',
      'https://raw.githubusercontent.com/ManiacalLabs/BiblioPixel/master/tox.ini'
      ),
