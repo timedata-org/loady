@@ -1,4 +1,4 @@
-import requests
+import json, requests
 from bs4 import BeautifulSoup
 
 
@@ -58,13 +58,35 @@ def raw(url, url_rewriters=URL_REWRITERS):
     return url
 
 
-def request(url, url_rewriters=URL_REWRITERS, json=True):
+def request_remote(url, url_rewriters, use_json):
     """Return data at the raw version of a URL, or raise an exception.
 
     If the URL ends in .json and json=True, convert the data from JSON.
     """
-    r = requests.get(raw(url, url_rewriters))
+    r = requests.get(raw(url, url_rewriters or URL_REWRITERS))
     if not r.ok:
         raise ValueError('Couldn\'t read %s with code %s:\n%s' %
                          url, r.status_code, r.text)
-    return r.json if json and url.endswith('.json') else r.text
+    return r.json if use_json else r.text
+
+
+def request_local(location, use_json):
+    with open(location) as fp:
+        return json.load(fp) if use_json else fp.read()
+
+
+def request(location, url_rewriters=None, json=None):
+    """Return data at either a file location or at the raw version of a
+    URL, or raise an exception.
+
+    locations containing a : are URLs, otherwise they are file
+    locations.
+
+    If the URL ends in .json and json=True, convert the data from JSON."""
+
+    if json is None:
+        json = location.endswith('.json')
+
+    if ':' in location:
+        return request_remote(location, url_rewriters, json)
+    return request_local(location, json)
