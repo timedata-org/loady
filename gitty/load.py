@@ -40,6 +40,9 @@ def load(url, url_rewriters=None, request=raw.request):
     except KeyError:
         names = [k for k in local if not k.startswith('_')]
 
+    if python_path and python_path[0] == 'py':
+        python_path.pop(0)
+
     first, *rest = python_path or [_guess_name(names, filename, url)]
     try:
         result = local[first]

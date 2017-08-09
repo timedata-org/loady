@@ -5,8 +5,11 @@ SIMPLE_FILE = """
 FOO = 1
 BAR = 2
 
+py = 7
+
 class Sim_Ple:
     MEMBER = 4
+    py = 3
 """
 
 MOCK_FILES = {
@@ -30,6 +33,12 @@ class LoadTest(unittest.TestCase):
         self.assertEquals(mock_load('foo/bar/simple').MEMBER, 4)
         self.assertEquals(mock_load('foo/bar/simple.Sim_Ple.MEMBER'), 4)
         self.assertEquals(mock_load('foo/bar/simple.FOO'), 1)
+
+    def test_py(self):
+        self.assertEquals(mock_load('foo/bar/simple.py').MEMBER, 4)
+        self.assertEquals(mock_load('foo/bar/simple.py.py'), 7)
+        self.assertEquals(mock_load('foo/bar/simple.Sim_Ple.py'), 3)
+        self.assertEquals(mock_load('foo/bar/simple.py.Sim_Ple.py'), 3)
 
     def test_error(self):
         with self.assertRaises(KeyError):
