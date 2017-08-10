@@ -1,6 +1,6 @@
 import os, subprocess, sys
 
-DRY_RUN = True
+DRY_RUN = False
 
 
 def call(s, *args):
