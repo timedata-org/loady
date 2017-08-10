@@ -3,6 +3,7 @@ from . import config, library
 
 ORIGINAL_SYS_PATH = sys.path[:]
 PREFIX = '//git/'
+PULL_AUTOMATICALLY = False
 
 
 def load(gitpath, prefix=PREFIX):
@@ -21,7 +22,7 @@ def load(gitpath, prefix=PREFIX):
         e.msg += ('for path ' + gitpath,)
         raise
 
-    lib.load() or lib.pull()
+    lib.load() or PULL_AUTOMATICALLY and lib.pull()
     return lib.path
 
 
