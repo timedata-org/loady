@@ -22,7 +22,7 @@ def mock_load(url):
     def request(file_url, rewriters, json):
         return MOCK_FILES[file_url]
 
-    return load.load(url, request=request)
+    return load.load(url, request=request, use_whitelist=False)
 
 
 class LoadTest(unittest.TestCase):

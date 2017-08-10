@@ -1,4 +1,4 @@
-from . import raw
+from . import raw, whitelist
 
 
 def _guess_name(names, filename, url):
@@ -18,16 +18,33 @@ def _guess_name(names, filename, url):
     raise ValueError('No member specified in %s' % url)
 
 
-def load(url, url_rewriters=None, request=raw.request):
+def load(url, use_whitelist=True, whitelist_prompt=True,
+         url_rewriters=None, request=raw.request):
     """
     Read a single Python file in as code and extract members from it.
 
     Args:
-        url: https://github.com/foo/bar/blob/master/bibliopixel/myfile.MyClass
+        url: a URL looking like
+             https://github.com/foo/bar/blob/master/bibliopixel/myfile.MyClass
+
+        use_whitelist: if true, make sure that the provider, user and project
+                       are whitelisted before downloading code.
+
+        whitelist_prompt: if true, prompt user to add code to the whitelist;
+                          otherwise throw an exception if code is not
+                          whitelisted.
     """
     slash = url.rfind('/')
     url_root, filepath = url[:slash + 1], url[slash + 1:]
     filename, *python_path = filepath.split('.')
+
+    if use_whitelist:
+        protocol, nothing, provider, user, project = url_root.split('/', 5)
+        if not nothing:
+            raise ValueError('Invalid URL %s' % url_root)
+
+        entry = [provider, user, project]
+        whitelist.check_or_prompt_to_add(entry, whitelist_prompt)
 
     file_url = url_root + filename + '.py'
     source = request(file_url, url_rewriters, False)

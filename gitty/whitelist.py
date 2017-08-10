@@ -43,29 +43,28 @@ def matches_any(target, whitelist):
     return any(matches(target, e) for e in whitelist)
 
 
-def check_allow_prompt(entry, whitelist, input=input):
-    if matches_any(entry, whitelist):
-        return True
-
+def check_allow_prompt(entry, whitelist, whitelist_prompt=True, input=input):
     def prompt(message, names):
         msg = message.format(**names)
         return input(msg).lower().strip().startswith('y')
 
-    provider, user, *rest = entry[:3]
-    project = rest and rest[0] or ''
+    if matches_any(entry, whitelist):
+        return True
 
-    if prompt(MESSAGES[0], locals()) and prompt(MESSAGES[1], locals()):
-        return False
+    if whitelist_prompt:
+        provider, user, *rest = entry[:3]
+        project = rest and rest[0] or ''
+
+        if prompt(MESSAGES[0], locals()) and prompt(MESSAGES[1], locals()):
+            return False
 
     raise ValueError('Did not whitelist %s' % ' '.join(entry))
 
 
-def check_or_prompt_to_add(entry):
-    if isinstance(entry, 'str'):
-        entry = entry.split()
-
+def check_or_prompt_to_add(entry, whitelist_prompt=True):
+    """Throws an exception if the entry isn't on the whitelist."""
     whitelist = read_whitelist()
-    if not check_allow_prompt(entry, whitelist):
+    if not check_allow_prompt(entry, whitelist, whitelist_prompt):
         whitelist.append(entry)
         write_whitelist(whitelist)
 

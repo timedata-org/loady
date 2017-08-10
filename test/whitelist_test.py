@@ -42,7 +42,8 @@ class WhitelistTest(unittest.TestCase):
                 return prompts.append(prompt) or value
 
             prompts.clear()
-            return whitelist.check_allow_prompt(entry, WHITELIST, mock_input)
+            return whitelist.check_allow_prompt(
+                entry, WHITELIST, input=mock_input)
 
         self.assertTrue(check('y', 'github.com', 'rec', 'swirly'))
         self.assertFalse(prompts)
