@@ -6,6 +6,8 @@ try:
 except:
     git = None
 
+PREFIX = '//git/'
+
 
 def clear_library_cache(prompt=True):
     """Clear gitty's cache."""
@@ -58,6 +60,29 @@ class Library(object):
             if self.commit:
                 repo.head.reset(self.commit, index=True, working_tree=True)
             return True
+
+
+def create(gitpath):
+    """
+    Create a Library from a git path.
+
+    """
+    if gitpath.startswith(PREFIX):
+        path = gitpath[len(PREFIX):]
+        try:
+            return Library(*path.split('/'))
+        except Exception as e:
+            e.msg += ('for path ' + gitpath,)
+            raise
+
+
+def to_path(gitpath):
+    library = create(gitpath)
+    if not library:
+        return gitpath
+
+    library.load()
+    return library.path
 
 
 MISSING_GIT_ERROR = """
