@@ -1,5 +1,5 @@
 import os, shutil
-from . import config, files
+from . import config, files, whitelist
 
 try:
     import git
@@ -21,9 +21,11 @@ def clear_library_cache(prompt=True):
 class Library(object):
     """Represents a single Python library loaded from a git repository."""
 
-    CHECKOUT = 'https://:@{provider}/{user}/{project}.git'
+    GIT_URL = 'https://:@{provider}/{user}/{project}.git'
 
     def __init__(self, provider, user, project, branch='master', commit=None):
+        whitelist.check_entry(provider, user, project, branch, commit)
+
         self.provider = provider
         self.user = user
         self.project = project
@@ -42,22 +44,21 @@ class Library(object):
         git.Repo(self.path).remote().pull(self.branch)
 
     def load(self):
-        """Load a library.  Returns true if the library was loaded or reloaded,
-           false if the library already existed."""
+        """Load the library."""
         if not git:
             raise EnvironmentError(MISSING_GIT_ERROR)
 
         if os.path.exists(self.path):
             if not config.CACHE_DISABLE:
-                return False
+                return
             shutil.rmtree(self.path, ignore_errors=True)
 
         with files.remove_on_exception(self.path):
-            url = self.CHECKOUT.format(**vars(self))
-            repo = git.Repo.clone_from(url=url, to_path=self.path, b=self.branch)
+            url = self.GIT_URL.format(**vars(self))
+            repo = git.Repo.clone_from(
+                url=url, to_path=self.path, b=self.branch)
             if self.commit:
                 repo.head.reset(self.commit, index=True, working_tree=True)
-            return True
 
 
 def create(gitpath):
@@ -67,11 +68,7 @@ def create(gitpath):
     """
     if gitpath.startswith(config.LIBRARY_PREFIX):
         path = gitpath[len(config.LIBRARY_PREFIX):]
-        try:
-            return Library(*path.split('/'))
-        except Exception as e:
-            e.msg += ('for path ' + gitpath,)
-            raise
+        return Library(*path.split('/'))
 
 
 def to_path(gitpath):

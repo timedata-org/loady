@@ -61,7 +61,7 @@ def check_allow_prompt(entry, whitelist, input=input):
     raise ValueError('Did not whitelist %s' % ' '.join(entry))
 
 
-def check_or_prompt_to_add(entry):
+def check_entry(*entry):
     """Throws an exception if the entry isn't on the whitelist."""
     whitelist = read_whitelist()
     if not check_allow_prompt(entry, whitelist):
@@ -77,7 +77,7 @@ def check_url(url):
     if not nothing:
         raise ValueError('Invalid URL %s' % url)
 
-    check_or_prompt_to_add([provider, user, project])
+    check_entry(provider, user, project)
 
 
 MESSAGES = [
