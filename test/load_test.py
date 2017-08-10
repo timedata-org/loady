@@ -19,7 +19,7 @@ MOCK_FILES = {
 
 
 def mock_load(url):
-    def request(file_url, rewriters, json):
+    def request(file_url, json):
         return MOCK_FILES[file_url]
 
     return load.load(url, request=request, use_whitelist=False)

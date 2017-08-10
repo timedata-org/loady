@@ -18,8 +18,7 @@ def _guess_name(names, filename, url):
     raise ValueError('No member specified in %s' % url)
 
 
-def load(url, use_whitelist=True, whitelist_prompt=True,
-         url_rewriters=None, request=raw.request):
+def load(url, use_whitelist=True, whitelist_prompt=True, request=raw.request):
     """
     Read a single Python file in as code and extract members from it.
 
@@ -47,7 +46,7 @@ def load(url, use_whitelist=True, whitelist_prompt=True,
         whitelist.check_or_prompt_to_add(entry, whitelist_prompt)
 
     file_url = url_root + filename + '.py'
-    source = request(file_url, url_rewriters, False)
+    source = request(file_url, False)
     compiled = compile(source, file_url, mode='exec')
     local = {}
     exec(compiled, globals(), local)

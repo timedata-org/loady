@@ -14,7 +14,7 @@ URL_REWRITERS = {
 }
 
 
-def raw(url, url_rewriters=URL_REWRITERS):
+def raw(url):
     """Return a raw version of the URL if there is one.
     Otherwise returns the original URL.
 
@@ -49,7 +49,7 @@ def raw(url, url_rewriters=URL_REWRITERS):
     except:
         return url
 
-    rewriter = url_rewriters.get(provider)
+    rewriter = URL_REWRITERS.get(provider)
 
     if protocol and (not empty) and user and project and rest and rewriter:
         parts = [protocol, empty, rewriter['provider'], user, project]
@@ -58,12 +58,12 @@ def raw(url, url_rewriters=URL_REWRITERS):
     return url
 
 
-def request_remote(url, url_rewriters, use_json):
+def request_remote(url, use_json):
     """Return data at the raw version of a URL, or raise an exception.
 
     If the URL ends in .json and json=True, convert the data from JSON.
     """
-    r = requests.get(raw(url, url_rewriters or URL_REWRITERS))
+    r = requests.get(raw(url))
     if not r.ok:
         raise ValueError('Couldn\'t read %s with code %s:\n%s' %
                          url, r.status_code, r.text)
@@ -75,7 +75,7 @@ def request_local(location, use_json):
         return json.load(fp) if use_json else fp.read()
 
 
-def request(location, url_rewriters=None, json=None):
+def request(location, json=None):
     """Return data at either a file location or at the raw version of a
     URL, or raise an exception.
 
@@ -87,6 +87,5 @@ def request(location, url_rewriters=None, json=None):
     if json is None:
         json = location.endswith('.json')
 
-    if ':' in location:
-        return request_remote(location, url_rewriters, json)
-    return request_local(location, json)
+    f = request_remote if ':' in location else request_local
+    return f(location, json)
