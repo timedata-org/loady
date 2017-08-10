@@ -11,6 +11,10 @@ PATH = os.environ.get('GITTY_PATH', '')
 CACHE_DIRECTORY = os.environ.get('GITTY_CACHE_DIRECTORY', '~/.gitty')
 WHITELIST = os.environ.get('GITTY_WHITELIST', '~/.gitty_whitelist')
 
+USE_WHITELIST = True
+WHITELIST_PROMPT = True
+LIBRARY_PREFIX = '//git/'
+
 
 def cache():
     return files.canonical(CACHE_DIRECTORY)

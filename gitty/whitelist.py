@@ -12,9 +12,6 @@ where the last four components are optional.
 Empty components mean "match anything".
 """
 
-USE_WHITELIST = True
-WHITELIST_PROMPT = True
-
 
 def read_whitelist(filename=None):
     filename = filename or config.whitelist()
@@ -54,7 +51,7 @@ def check_allow_prompt(entry, whitelist, input=input):
     if matches_any(entry, whitelist):
         return True
 
-    if WHITELIST_PROMPT:
+    if config.WHITELIST_PROMPT:
         provider, user, *rest = entry[:3]
         project = rest and rest[0] or ''
 
@@ -73,7 +70,7 @@ def check_or_prompt_to_add(entry):
 
 
 def check_url(url):
-    if not USE_WHITELIST:
+    if not config.USE_WHITELIST:
         return
 
     protocol, nothing, provider, user, project = url.split('/', 5)

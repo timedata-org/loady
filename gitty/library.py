@@ -6,8 +6,6 @@ try:
 except:
     git = None
 
-PREFIX = '//git/'
-
 
 def clear_library_cache(prompt=True):
     """Clear gitty's cache."""
@@ -67,8 +65,8 @@ def create(gitpath):
     Create a Library from a git path.
 
     """
-    if gitpath.startswith(PREFIX):
-        path = gitpath[len(PREFIX):]
+    if gitpath.startswith(config.LIBRARY_PREFIX):
+        path = gitpath[len(config.LIBRARY_PREFIX):]
         try:
             return Library(*path.split('/'))
         except Exception as e:
