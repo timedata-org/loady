@@ -12,6 +12,9 @@ where the last four components are optional.
 Empty components mean "match anything".
 """
 
+USE_WHITELIST = True
+WHITELIST_PROMPT = True
+
 
 def read_whitelist(filename=None):
     filename = filename or config.whitelist()
@@ -43,7 +46,7 @@ def matches_any(target, whitelist):
     return any(matches(target, e) for e in whitelist)
 
 
-def check_allow_prompt(entry, whitelist, whitelist_prompt=True, input=input):
+def check_allow_prompt(entry, whitelist, input=input):
     def prompt(message, names):
         msg = message.format(**names)
         return input(msg).lower().strip().startswith('y')
@@ -51,7 +54,7 @@ def check_allow_prompt(entry, whitelist, whitelist_prompt=True, input=input):
     if matches_any(entry, whitelist):
         return True
 
-    if whitelist_prompt:
+    if WHITELIST_PROMPT:
         provider, user, *rest = entry[:3]
         project = rest and rest[0] or ''
 
@@ -61,12 +64,23 @@ def check_allow_prompt(entry, whitelist, whitelist_prompt=True, input=input):
     raise ValueError('Did not whitelist %s' % ' '.join(entry))
 
 
-def check_or_prompt_to_add(entry, whitelist_prompt=True):
+def check_or_prompt_to_add(entry):
     """Throws an exception if the entry isn't on the whitelist."""
     whitelist = read_whitelist()
-    if not check_allow_prompt(entry, whitelist, whitelist_prompt):
+    if not check_allow_prompt(entry, whitelist):
         whitelist.append(entry)
         write_whitelist(whitelist)
+
+
+def check_url(url):
+    if not USE_WHITELIST:
+        return
+
+    protocol, nothing, provider, user, project = url.split('/', 5)
+    if not nothing:
+        raise ValueError('Invalid URL %s' % url)
+
+    check_or_prompt_to_add([provider, user, project])
 
 
 MESSAGES = [

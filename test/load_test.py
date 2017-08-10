@@ -1,5 +1,5 @@
 import unittest
-from gitty import load
+from gitty import load, whitelist
 
 SIMPLE_FILE = """
 FOO = 1
@@ -22,7 +22,11 @@ def mock_load(url):
     def request(file_url, json):
         return MOCK_FILES[file_url]
 
-    return load.load(url, request=request, use_whitelist=False)
+    try:
+        use_whitelist, whitelist.USE_WHITELIST = whitelist.USE_WHITELIST, False
+        return load.load(url, request=request)
+    finally:
+        whitelist.USE_WHITELIST = use_whitelist
 
 
 class LoadTest(unittest.TestCase):
