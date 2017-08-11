@@ -18,7 +18,7 @@ def _guess_name(names, filename, url):
     raise ValueError('No member specified in %s' % url)
 
 
-def load_location(url, request=raw.request):
+def load_location(url):
     """
     Read a single Python file in as code and extract members from it.
 
@@ -34,7 +34,7 @@ def load_location(url, request=raw.request):
     whitelist.check_url(url_root)
 
     file_url = url_root + filename + '.py'
-    source = request(file_url, False)
+    source = raw.request(file_url, False)
     compiled = compile(source, file_url, mode='exec')
     local = {}
     exec(compiled, globals(), local)
@@ -59,8 +59,8 @@ def load_location(url, request=raw.request):
     return result
 
 
-def load(name, request=raw.request):
+def load(name):
     if '/' in name:
-        return load_location(name, request)
+        return load_location(name)
 
     return importer.import_symbol(name)

@@ -22,11 +22,13 @@ def mock_load(url):
     def request(file_url, json):
         return MOCK_FILES[file_url]
 
+    use_whitelist, config.USE_WHITELIST = config.USE_WHITELIST, False
+    load.raw.request, raw_request = request, load.raw.request
     try:
-        use_whitelist, config.USE_WHITELIST = config.USE_WHITELIST, False
-        return load.load(url, request=request)
+        return load.load(url)
     finally:
         config.USE_WHITELIST = use_whitelist
+        load.raw.request = raw_request
 
 
 class LoadTest(unittest.TestCase):
