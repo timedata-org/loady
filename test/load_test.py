@@ -1,4 +1,4 @@
-import unittest
+import math, unittest
 from gitty import config, load, whitelist
 
 SIMPLE_FILE = """
@@ -45,8 +45,13 @@ class LoadTest(unittest.TestCase):
         self.assertEquals(mock_load('foo/bar/simple.py.Sim_Ple.py'), 3)
 
     def test_error(self):
-        with self.assertRaises(KeyError):
+        with self.assertRaises(ImportError):
             mock_load('failure')
 
         with self.assertRaises(AttributeError):
             mock_load('foo/bar/trivial.B')
+
+    def test_imports(self):
+        self.assertIs(mock_load('math'), math)
+        self.assertIs(mock_load('math.log'), math.log)
+        self.assertIs(mock_load('test.load_test.LoadTest'), LoadTest)

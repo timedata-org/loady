@@ -1,4 +1,4 @@
-from . import raw, whitelist
+from . import importer, raw, whitelist
 
 
 def _guess_name(names, filename, url):
@@ -18,7 +18,7 @@ def _guess_name(names, filename, url):
     raise ValueError('No member specified in %s' % url)
 
 
-def load(url, request=raw.request):
+def load_location(url, request=raw.request):
     """
     Read a single Python file in as code and extract members from it.
 
@@ -57,3 +57,10 @@ def load(url, request=raw.request):
         result = getattr(result, r)
 
     return result
+
+
+def load(name, request=raw.request):
+    if '/' in name:
+        return load_location(name, request)
+
+    return importer.import_symbol(name)
