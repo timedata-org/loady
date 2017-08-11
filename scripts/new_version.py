@@ -12,12 +12,17 @@ def split_version(s):
     return tuple(int(i) for i in s.split('.'))
 
 
-def new_version(new_version_string, comment):
+def new_version(comment, new_version_string=''):
     root_file = os.path.dirname(os.path.dirname(__file__))
     version_file = os.path.join(root_file, 'gitty', 'VERSION')
 
     old_version = split_version(open(version_file).read())
-    new_version = split_version(new_version_string)
+
+    if new_version_string:
+        new_version = split_version(new_version_string)
+    else:
+        new_version = old_version[:2] + (old_version[2] + 1,)
+        new_version_string = '.'.join(str(i) for i in new_version)
 
     assert new_version > old_version
 
