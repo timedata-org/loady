@@ -71,8 +71,20 @@ def request_remote(url, use_json):
 
 
 def request_local(location, use_json):
-    with open(location) as fp:
-        return json.load(fp) if use_json else fp.read()
+    try:
+        data = open(location).read()
+    except Exception as e:
+        e.msg = ('Error in file %s' % location,) + e.msg
+        raise
+
+    if not use_json:
+        return data
+
+    try:
+        return json.loads(data)
+    except Exception as e:
+        e.msg = ('JSON Error in file %s' % location,) + e.msg
+        raise
 
 
 def request(location, json=None):
