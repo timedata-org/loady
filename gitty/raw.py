@@ -74,7 +74,7 @@ def request_local(location, use_json):
     try:
         data = open(location).read()
     except Exception as e:
-        e.msg = ('Error in file %s' % location,) + e.msg
+        e.args = ('Error in file %s' % location,) + e.args
         raise
 
     if not use_json:
@@ -83,7 +83,7 @@ def request_local(location, use_json):
     try:
         return json.loads(data)
     except Exception as e:
-        e.msg = ('JSON Error in file %s' % location,) + e.msg
+        e.args = ('JSON Error in file %s' % location,) + e.args
         raise
 
 
