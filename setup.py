@@ -36,9 +36,9 @@ with open('test_requirements.txt') as f:
 
 
 setup(
-    name='Loady',
+    name='loady',
     version=VERSION,
-    description=('Loady lets you load Python libraries, JSON and raw text ' +
+    description=('loady lets you load Python libraries, JSON and raw text ' +
                  'dynamically from git'),
     author='Tom Ritchford',
     author_email='tom@swirly.com',
