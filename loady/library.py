@@ -7,7 +7,7 @@ except:
     git = None
 
 
-def clear_library_cache(prompt=True):
+def clear(prompt=True):
     """Clear loady's cache."""
     if prompt:
         answer = input(

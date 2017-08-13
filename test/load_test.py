@@ -1,5 +1,5 @@
 import math, unittest
-from loady import config, load, load_symbol, whitelist
+from loady import code, config, data, whitelist
 
 SIMPLE_FILE = """
 FOO = 1
@@ -19,16 +19,16 @@ MOCK_FILES = {
 
 
 def mock_load(url):
-    def request(file_url, json):
+    def load_data(file_url, is_json):
         return MOCK_FILES[file_url]
 
     use_whitelist, config.USE_WHITELIST = config.USE_WHITELIST, False
-    load_symbol.raw.request, raw_request = request, load_symbol.raw.request
+    code.data.load, code_data_load = load_data, code.data.load
     try:
-        return load(url)
+        return code.load(url)
     finally:
         config.USE_WHITELIST = use_whitelist
-        load_symbol.raw.request = raw_request
+        code.data.load = code_data_load
 
 
 class LoadTest(unittest.TestCase):

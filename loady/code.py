@@ -1,4 +1,4 @@
-from . import importer, raw, whitelist
+from . import importer, data, whitelist
 
 
 def _guess_name(names, filename, url):
@@ -34,7 +34,7 @@ def load_location(url):
     whitelist.check_url(url_root)
 
     file_url = url_root + filename + '.py'
-    source = raw.request(file_url, False)
+    source = data.load(file_url, False)
     compiled = compile(source, file_url, mode='exec')
     local = {}
     exec(compiled, globals(), local)

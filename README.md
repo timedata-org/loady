@@ -8,16 +8,20 @@ the web.
     import loady
 
     # Permanently extend sys path with this github repo.
-    loady.extend_sys_path('//git/github.com/timedata-org/simple'):
+    loady.sys_path.extend('//git/github.com/timedata-org/simple'):
 
     # Temporarily extend sys path with this github repo.
     with loady.sys_path.extender('//git/github.com/timedata-org/simple'):
         # Do stuff.
 
     # Get raw data from URLs.
-    result = loady.raw.request(
+    result = loady.data.load(
         'https://github.com/timedata-org/simple/blob/master/simple.json')
 
-    # Actualy gets the raw data from this URL:
+    # Actually gets the raw data from this URL:
     # https://raw.githubusercontent.com/timedata-org/simple/master/simple.json
     # and reads it as JSON.
+
+    #  Loads and compiles Python code from that URL.
+    result = loady.code.load(
+        'https://github.com/timedata-org/simple/blob/master/test.py')
