@@ -14,7 +14,7 @@ def split_version(s):
 
 def new_version(comment, new_version_string=''):
     root_file = os.path.dirname(os.path.dirname(__file__))
-    version_file = os.path.join(root_file, 'gitty', 'VERSION')
+    version_file = os.path.join(root_file, 'loady', 'VERSION')
 
     old_version = split_version(open(version_file).read())
 
@@ -32,7 +32,7 @@ def new_version(comment, new_version_string=''):
             fp.write('\n')
 
     commit_comment = 'Update to version %s' % new_version_string
-    call('git commit gitty/VERSION -m', commit_comment)
+    call('git commit loady/VERSION -m', commit_comment)
     call('git push')
     call('git tag v%s -am' % new_version_string, comment)
     call('git push --tag')

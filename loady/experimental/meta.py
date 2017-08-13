@@ -22,11 +22,11 @@ class TestLoader(importlib.abc.SourceLoader):
 # class TestFinder(importlib.abc.MetaPathFinder):
 
 def install():
-    f = RedirectFinder('gitty.remote', '/development/gitty/gitty/test')
+    f = RedirectFinder('loady.remote', '/development/loady/loady/test')
     sys.meta_path.insert(0, f)
 
 
 if __name__ == '__main__':
     install()
-    from gitty.remote import toast
+    from loady.remote import toast
     print(toast.TOAST)

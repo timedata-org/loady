@@ -8,7 +8,7 @@ except:
 
 
 def clear_library_cache(prompt=True):
-    """Clear gitty's cache."""
+    """Clear loady's cache."""
     if prompt:
         answer = input(
             'Clear library cache files in %s/? (yN) ' % config.cache())

@@ -20,7 +20,7 @@ class RunTests(TestCommand):
             raise SystemExit(errno)
 
 
-NAME = 'gitty'
+NAME = 'loady'
 OWNER = 'timedata-org'
 FILENAME = os.path.join(os.path.dirname(__file__), NAME, 'VERSION')
 VERSION = open(FILENAME).read().strip()
@@ -36,9 +36,9 @@ with open('test_requirements.txt') as f:
 
 
 setup(
-    name='Gitty',
+    name='Loady',
     version=VERSION,
-    description=('Gitty lets you load Python libraries, JSON and raw text ' +
+    description=('Loady lets you load Python libraries, JSON and raw text ' +
                  'dynamically from git'),
     author='Tom Ritchford',
     author_email='tom@swirly.com',

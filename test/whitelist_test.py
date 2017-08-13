@@ -1,5 +1,5 @@
 import contextlib, unittest
-from gitty import whitelist
+from loady import whitelist
 
 WHITELIST = [
     ['github.com', 'rec', 'swirly'],

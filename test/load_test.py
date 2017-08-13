@@ -1,5 +1,5 @@
 import math, unittest
-from gitty import config, load, load_symbol, whitelist
+from loady import config, load, load_symbol, whitelist
 
 SIMPLE_FILE = """
 FOO = 1

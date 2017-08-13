@@ -1,6 +1,6 @@
 import unittest
 
-from gitty.importer import import_symbol
+from loady.importer import import_symbol
 from test.sub import foo
 
 
@@ -11,7 +11,7 @@ class ImporterTest(unittest.TestCase):
 
     def test_single(self):
         import_symbol('math')
-        import_symbol('gitty')
+        import_symbol('loady')
 
     def test_failed_single(self):
         with self.assertRaises(ImportError):
@@ -29,7 +29,7 @@ class ImporterTest(unittest.TestCase):
             import_symbol('math.log12')
 
         with self.assertRaises(ImportError):
-            import_symbol('gitty.log12')
+            import_symbol('loady.log12')
 
     def test_longer(self):
         self.assertIs(import_symbol('test.sub.foo'), foo)

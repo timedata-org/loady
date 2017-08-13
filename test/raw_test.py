@@ -1,5 +1,5 @@
 import unittest
-from gitty.raw import raw
+from loady.raw import raw
 
 
 class RawTest(unittest.TestCase):

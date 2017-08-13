@@ -1,4 +1,4 @@
-include gitty/VERSION
+include loady/VERSION
 include requirements.txt
 include test_requirements.txt
 recursive-exclude test *

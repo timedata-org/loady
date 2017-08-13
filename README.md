@@ -1,20 +1,21 @@
-# gitty
+# loady
 
-Dynamically load Python libraries, JSON and raw text from git repositories.
+Dynamically load Python libraries, JSON and raw text from git repositories and
+the web.
 
 # Basic usage
 
-    import gitty
+    import loady
 
     # Permanently extend sys path with this github repo.
-    gitty.extend_sys_path('//git/github.com/timedata-org/simple'):
+    loady.extend_sys_path('//git/github.com/timedata-org/simple'):
 
     # Temporarily extend sys path with this github repo.
-    with gitty.sys_path.extender('//git/github.com/timedata-org/simple'):
+    with loady.sys_path.extender('//git/github.com/timedata-org/simple'):
         # Do stuff.
 
     # Get raw data from URLs.
-    result = gitty.raw.request(
+    result = loady.raw.request(
         'https://github.com/timedata-org/simple/blob/master/simple.json')
 
     # Actualy gets the raw data from this URL:
