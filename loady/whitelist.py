@@ -69,13 +69,25 @@ def check_entry(*entry):
         write_whitelist(whitelist)
 
 
+def is_file(name):
+    if ':' not in name:
+        return True
+
+    # It might be a local Windows file!
+    prefix, _ = name.split(':', 1)
+    return len(prefix) == 1
+
+
 def check_url(url):
-    if not config.USE_WHITELIST:
+    if not config.USE_WHITELIST or is_file(url):
         return
 
-    protocol, nothing, provider, user, project = url.split('/', 5)
-    if not nothing:
-        raise ValueError('Invalid URL %s' % url)
+    try:
+        protocol, nothing, provider, user, project = url.split('/', 5)
+        if not nothing:
+            raise ValueError
+    except:
+        raise ValueError('Cannot understand URL', url)
 
     check_entry(provider, user, project)
 
