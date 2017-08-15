@@ -37,7 +37,7 @@ def load_location(url):
     source = data.load(file_url, False)
     compiled = compile(source, file_url, mode='exec')
     local = {}
-    exec(compiled, globals(), local)
+    exec(compiled, local)
 
     try:
         names = local['__all__']
