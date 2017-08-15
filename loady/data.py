@@ -1,4 +1,4 @@
-import json, requests
+import json, os, requests
 from . import raw
 
 
@@ -18,9 +18,11 @@ def load(location, use_json=None):
         data = r.text
     else:
         try:
-            data = open(location).read()
+            f = os.path.realpath(os.path.abspath(os.path.expanduser(location)))
+            data = open(f).read()
         except Exception as e:
-            e.args = ('There was an error reading the file', location) + e.args
+            e.args = (
+                'There was an error reading the file', location, f) + e.args
             raise
 
     if use_json is None:
