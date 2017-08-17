@@ -1,4 +1,5 @@
-from . import importer, data, whitelist
+import functools
+from . import data, importer, whitelist
 
 
 def _guess_name(names, filename, url):
@@ -59,8 +60,14 @@ def load_location(url):
     return result
 
 
+@functools.lru_cache()
 def load(name):
     if '/' in name:
         return load_location(name)
 
     return importer.import_symbol(name)
+
+
+def cache_clear():
+    load.cache_clear()
+    data.cache_clear()

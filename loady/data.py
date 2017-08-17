@@ -1,7 +1,8 @@
-import json, os, requests
+import functools, json, os, requests
 from . import raw, whitelist
 
 
+@functools.lru_cache()
 def load(location, use_json=None):
     """Return data at either a file location or at the raw version of a
     URL, or raise an exception.
@@ -38,3 +39,6 @@ def load(location, use_json=None):
     except Exception as e:
         e.args = ('There was a JSON error in the file', location) + e.args
         raise
+
+
+cache_clear = load.cache_clear
