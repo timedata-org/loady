@@ -16,7 +16,7 @@ def load(location, use_json=None):
         r = requests.get(raw.raw(location))
         if not r.ok:
             raise ValueError('Couldn\'t read %s with code %s:\n%s' %
-                             location, r.status_code, r.text)
+                             (location, r.status_code, r.text))
         data = r.text
     else:
         try:
