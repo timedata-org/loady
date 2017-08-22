@@ -15,7 +15,7 @@ Empty components mean "match anything".
 
 def read_whitelist(filename=None):
     filename = filename or config.whitelist()
-    if os.exists(filename):
+    if os.path.exists(filename):
         return json.load(open(filename))
 
     return []
