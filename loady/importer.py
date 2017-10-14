@@ -1,8 +1,19 @@
 import importlib
 
 
-def import_symbol(typename):
-    """Import a module or typename within a module from its name."""
+def import_symbol(typename, base_path=None):
+    """
+    Import a module or typename within a module from its name.
+
+    Arguments:
+
+    typename: An absolute or relative (starts with a .) Python path
+    base_path: If typename is relative, base_path is prepended to it.
+    """
+
+    if base_path and typename.startswith('.'):
+        typename = base_path + typename
+
     try:
         return importlib.import_module(typename)
 

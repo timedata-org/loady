@@ -19,15 +19,26 @@ def _guess_name(names, filename, url):
     raise ValueError('No member specified in %s' % url)
 
 
-def load_location(url):
+def load_location(url, base_path=None):
     """
     Read a single Python file in as code and extract members from it.
 
     Args:
-        url: a URL looking like
-             https://github.com/foo/bar/blob/master/bibliopixel/myfile.MyClass
+        url -- a URL either absolute (contains ':') or relative
+        base_path -- if url is relative, base_path is prepended to it.
 
+    The resulting URL needs to look something like this:
+        https://github.com/foo/bar/blob/master/bibliopixel/myfile.MyClass
     """
+    if base_path and ':' not in url:
+        slashes = base_path.endswith('/') + url.startswith('/')
+        if slashes == 0:
+            url = base_path + '/' + url
+        elif slashes == 1:
+            url = base_path + url
+        else:
+            url = base_path[:-1] + url
+
     slash = url.rfind('/')
     url_root, filepath = url[:slash + 1], url[slash + 1:]
     filename, *python_path = filepath.split('.')
@@ -61,11 +72,11 @@ def load_location(url):
 
 
 @functools.lru_cache()
-def load(name):
+def load(name, base_path=None):
     if '/' in name:
-        return load_location(name)
+        return load_location(name, base_path)
 
-    return importer.import_symbol(name)
+    return importer.import_symbol(name, base_path)
 
 
 def cache_clear():

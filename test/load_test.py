@@ -13,19 +13,19 @@ class Sim_Ple:
 """
 
 MOCK_FILES = {
-    'foo/bar/trivial.py': 'A = 1',
-    'foo/bar/simple.py': SIMPLE_FILE,
+    'http://foo/bar/trivial.py': 'A = 1',
+    'http://foo/bar/simple.py': SIMPLE_FILE,
 }
 
 
-def mock_load(url):
+def mock_load(url, base_path=None):
     def load_data(file_url, is_json):
         return MOCK_FILES[file_url]
 
     use_whitelist, config.USE_WHITELIST = config.USE_WHITELIST, False
     code.data.load, code_data_load = load_data, code.data.load
     try:
-        return code.load(url)
+        return code.load(url, base_path)
     finally:
         config.USE_WHITELIST = use_whitelist
         code.data.load = code_data_load
@@ -33,25 +33,31 @@ def mock_load(url):
 
 class LoadTest(unittest.TestCase):
     def test_trivial(self):
-        self.assertEquals(mock_load('foo/bar/trivial'), 1)
+        self.assertEquals(mock_load('http://foo/bar/trivial'), 1)
 
     def test_simple(self):
-        self.assertEquals(mock_load('foo/bar/simple').MEMBER, 4)
-        self.assertEquals(mock_load('foo/bar/simple.Sim_Ple.MEMBER'), 4)
-        self.assertEquals(mock_load('foo/bar/simple.FOO'), 1)
+        self.assertEquals(mock_load('http://foo/bar/simple').MEMBER, 4)
+        self.assertEquals(mock_load('http://foo/bar/simple.Sim_Ple.MEMBER'), 4)
+        self.assertEquals(mock_load('http://foo/bar/simple.FOO'), 1)
 
     def test_py(self):
-        self.assertEquals(mock_load('foo/bar/simple.py').MEMBER, 4)
-        self.assertEquals(mock_load('foo/bar/simple.py.py'), 7)
-        self.assertEquals(mock_load('foo/bar/simple.Sim_Ple.py'), 3)
-        self.assertEquals(mock_load('foo/bar/simple.py.Sim_Ple.py'), 3)
+        self.assertEquals(mock_load('http://foo/bar/simple.py').MEMBER, 4)
+        self.assertEquals(mock_load('http://foo/bar/simple.py.py'), 7)
+        self.assertEquals(mock_load('http://foo/bar/simple.Sim_Ple.py'), 3)
+        self.assertEquals(mock_load('http://foo/bar/simple.py.Sim_Ple.py'), 3)
+
+    def test_base_path(self):
+        self.assertEquals(mock_load('bar/trivial', 'http://foo'), 1)
+        self.assertEquals(mock_load('/bar/simple', 'http://foo').MEMBER, 4)
+        self.assertEquals(mock_load('/bar/simple.FOO', 'http://foo/'), 1)
+        self.assertEquals(mock_load('bar/simple.py', 'http://foo/').MEMBER, 4)
 
     def test_error(self):
         with self.assertRaises(ImportError):
             mock_load('failure')
 
         with self.assertRaises(AttributeError):
-            mock_load('foo/bar/trivial.B')
+            mock_load('http://foo/bar/trivial.B')
 
     def test_imports(self):
         self.assertIs(mock_load('math'), math)

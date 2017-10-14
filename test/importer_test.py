@@ -34,3 +34,7 @@ class ImporterTest(unittest.TestCase):
     def test_longer(self):
         self.assertIs(import_symbol('test.sub.foo'), foo)
         self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
+
+    def test_base_path(self):
+        self.assertIs(import_symbol('.foo', base_path='test.sub'), foo)
+        self.assertIs(import_symbol('.sub.foo.Bar', base_path='test'), foo.Bar)
