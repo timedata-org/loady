@@ -2,7 +2,7 @@ import functools
 from . import data, importer, whitelist
 
 
-def load_location(url, base_path=None):
+def load_location(url, base_path=None, module=False):
     """
     Read a single Python file in as code and extract members from it.
 
@@ -42,7 +42,13 @@ def load_location(url, base_path=None):
     if python_path and python_path[0] == 'py':
         python_path.pop(0)
 
-    first, *rest = python_path or [importer.guess_name(names, filename, url)]
+    if not python_path:
+        if module:
+            return local
+        python_path = [importer.guess_name(names, filename, url)]
+
+    first, *rest = python_path
+
     try:
         result = local[first]
     except:
@@ -58,9 +64,18 @@ def load_location(url, base_path=None):
 def load(name, base_path=None):
     """Load executable code from a URL or a path"""
     if '/' in name:
-        return load_location(name, base_path)
+        return load_location(name, base_path, module=False)
 
     return importer.import_code(name, base_path)
+
+
+@functools.lru_cache()
+def load_module(name, base_path=None):
+    """Load a module from a URL or a path"""
+    if '/' in name:
+        return load_location(name, base_path, module=True)
+
+    return importer.import_symbol(name, base_path)
 
 
 def cache_clear():
