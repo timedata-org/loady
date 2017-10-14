@@ -2,23 +2,6 @@ import functools
 from . import data, importer, whitelist
 
 
-def _guess_name(names, filename, url):
-    if len(names) == 1:
-        return names[0]
-
-    if filename in names:
-        return filename
-
-    def canonical(symbol):
-        return symbol.lower().replace('_', '')
-
-    matches = [n for n in names if canonical(n) == canonical(filename)]
-    if len(matches) == 1:
-        return matches[0]
-
-    raise ValueError('No member specified in %s' % url)
-
-
 def load_location(url, base_path=None):
     """
     Read a single Python file in as code and extract members from it.
@@ -54,12 +37,12 @@ def load_location(url, base_path=None):
     try:
         names = local['__all__']
     except KeyError:
-        names = [k for k in local if not k.startswith('_')]
+        names = local
 
     if python_path and python_path[0] == 'py':
         python_path.pop(0)
 
-    first, *rest = python_path or [_guess_name(names, filename, url)]
+    first, *rest = python_path or [importer.guess_name(names, filename, url)]
     try:
         result = local[first]
     except:
@@ -73,10 +56,11 @@ def load_location(url, base_path=None):
 
 @functools.lru_cache()
 def load(name, base_path=None):
+    """Load executable code from a URL or a path"""
     if '/' in name:
         return load_location(name, base_path)
 
-    return importer.import_symbol(name, base_path)
+    return importer.import_code(name, base_path)
 
 
 def cache_clear():

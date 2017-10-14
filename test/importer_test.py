@@ -1,6 +1,6 @@
 import unittest
 
-from loady.importer import import_symbol
+from loady.importer import import_code, import_symbol
 from test.sub import foo
 
 
@@ -38,3 +38,11 @@ class ImporterTest(unittest.TestCase):
     def test_base_path(self):
         self.assertIs(import_symbol('.foo', base_path='test.sub'), foo)
         self.assertIs(import_symbol('.sub.foo.Bar', base_path='test'), foo.Bar)
+
+    def test_import_code(self):
+        self.assertTrue(import_code('test.sub.modules.same')())
+        self.assertTrue(import_code('test.sub.modules.single')())
+        self.assertTrue(import_code('test.sub.modules.underscore')())
+        self.assertTrue(import_code('test.sub.modules.under_score')())
+        with self.assertRaises(ValueError):
+            import_code('test.sub.modules.ambiguous')

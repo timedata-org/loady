@@ -60,6 +60,5 @@ class LoadTest(unittest.TestCase):
             mock_load('http://foo/bar/trivial.B')
 
     def test_imports(self):
-        self.assertIs(mock_load('math'), math)
         self.assertIs(mock_load('math.log'), math.log)
         self.assertIs(mock_load('test.load_test.LoadTest'), LoadTest)
