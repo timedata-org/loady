@@ -61,7 +61,7 @@ def load_location(url, base_path=None, module=False):
 
 
 @functools.lru_cache()
-def load(name, base_path=None):
+def load_code(name, base_path=None):
     """Load executable code from a URL or a path"""
     if '/' in name:
         return load_location(name, base_path, module=False)
@@ -70,7 +70,7 @@ def load(name, base_path=None):
 
 
 @functools.lru_cache()
-def load_module(name, base_path=None):
+def load(name, base_path=None):
     """Load a module from a URL or a path"""
     if '/' in name:
         return load_location(name, base_path, module=True)

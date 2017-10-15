@@ -25,7 +25,7 @@ def mock_load(url, base_path=None):
     use_whitelist, config.USE_WHITELIST = config.USE_WHITELIST, False
     code.data.load, code_data_load = load_data, code.data.load
     try:
-        return code.load(url, base_path)
+        return code.load_code(url, base_path)
     finally:
         config.USE_WHITELIST = use_whitelist
         code.data.load = code_data_load
