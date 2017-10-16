@@ -78,6 +78,9 @@ def load(name, base_path=None):
     return importer.import_symbol(name, base_path)
 
 
+load_module = load
+
+
 def cache_clear():
     load.cache_clear()
     data.cache_clear()
