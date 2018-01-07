@@ -2,7 +2,7 @@ import contextlib, sys
 from . import config, library
 
 
-def extend(path=None):
+def extend(path=None, cache=None):
     """Extend sys.path by a list of git paths."""
     if path is None:
         path = config.PATH
@@ -11,7 +11,7 @@ def extend(path=None):
     except:
         pass
 
-    sys.path.extend([library.to_path(p) for p in path])
+    sys.path.extend([library.to_path(p, cache) for p in path])
 
 
 @contextlib.contextmanager
