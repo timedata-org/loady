@@ -7,14 +7,15 @@ except:
     git = None
 
 
-def clear(prompt=True):
+def clear(prompt=True, cache=None):
     """Clear loady's cache."""
+    cache = cache or config.cache()
     if prompt:
         answer = input(
-            'Clear library cache files in %s/? (yN) ' % config.cache())
+            'Clear library cache files in %s/? (yN) ' % cache)
         if not answer.startswith('y'):
             return False
-    shutil.rmtree(config.cache(), ignore_errors=True)
+    shutil.rmtree(cache, ignore_errors=True)
     return True
 
 
@@ -23,7 +24,8 @@ class Library(object):
 
     GIT_URL = 'https://:@{provider}/{user}/{project}.git'
 
-    def __init__(self, provider, user, project, branch='master', commit=None):
+    def __init__(self, provider, user, project,
+                 branch='master', commit=None, cache=None):
         whitelist.check_entry(provider, user, project, branch, commit)
 
         self.provider = provider
@@ -31,6 +33,7 @@ class Library(object):
         self.project = project
         self.branch = branch
         self.commit = commit
+        cache = cache or config.cache()
 
         path = [config.cache(), provider, user, project, commit or branch]
         path = [files.sanitize(p) for p in path]
@@ -61,18 +64,18 @@ class Library(object):
                 repo.head.reset(self.commit, index=True, working_tree=True)
 
 
-def create(gitpath):
+def create(gitpath, cache=None):
     """
     Create a Library from a git path.
 
     """
     if gitpath.startswith(config.LIBRARY_PREFIX):
         path = gitpath[len(config.LIBRARY_PREFIX):]
-        return Library(*path.split('/'))
+        return Library(*path.split('/'), cache=cache)
 
 
-def to_path(gitpath):
-    library = create(gitpath)
+def to_path(gitpath, cache=None):
+    library = create(gitpath, cache)
     if not library:
         return gitpath
 

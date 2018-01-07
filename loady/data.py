@@ -4,7 +4,8 @@ from . import raw, whitelist
 
 @functools.lru_cache()
 def load(location, use_json=None):
-    """Return data at either a file location or at the raw version of a
+    """
+    Return data at either a file location or at the raw version of a
     URL, or raise an exception.
 
     A file location either contains no colons like /usr/tom/test.txt,
@@ -12,7 +13,9 @@ def load(location, use_json=None):
 
     A URL location is anything that's not a file location.
 
-    If the URL ends in .json and json=True, convert the data from JSON."""
+    If the URL ends in .json and `json != False`, or `json == True`,
+    convert the data from JSON.
+    """
     if not whitelist.is_file(location):
         r = requests.get(raw.raw(location))
         if not r.ok:
