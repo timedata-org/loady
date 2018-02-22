@@ -36,8 +36,26 @@ class ImporterTest(unittest.TestCase):
         self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
 
     def test_base_path(self):
-        self.assertIs(import_symbol('.foo', base_path='test.sub'), foo)
-        self.assertIs(import_symbol('.sub.foo.Bar', base_path='test'), foo.Bar)
+        self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
+        self.assertIs(import_symbol('test.sub.foo.Bar', 'test'), foo.Bar)
+
+        with self.assertRaises(ImportError):
+            self.assertIs(import_symbol('.test.sub.foo.Bar'), foo.Bar)
+        with self.assertRaises(ImportError):
+            import_symbol('.test.sub.foo.Bar', 'test')
+        with self.assertRaises(ImportError):
+            import_symbol('.sub.foo.Bar')
+
+        self.assertIs(import_symbol('.sub.foo.Bar', 'test'), foo.Bar)
+        self.assertIs(import_symbol('sub.foo.Bar', 'test'), foo.Bar)
+        self.assertIs(import_symbol('.foo.Bar', 'test.sub'), foo.Bar)
+        self.assertIs(import_symbol('foo.Bar', 'test.sub'), foo.Bar)
+
+        with self.assertRaises(ImportError):
+            import_symbol('.test.sub.foo.Bar')
+
+        self.assertIs(import_symbol('.foo', 'test.sub'), foo)
+        self.assertIs(import_symbol('.sub.foo.Bar', 'test'), foo.Bar)
 
     def test_import_code(self):
         self.assertTrue(import_code('test.sub.modules.same')())
