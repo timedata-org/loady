@@ -9,7 +9,6 @@ def _import(typename, base_path):
     assert not base_path or isinstance(base_path, str), str(base_path)
     def imp(typename):
         try:
-            print('importing! -->', typename)
             return importlib.import_module(typename)
 
         except ImportError as e:
