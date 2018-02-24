@@ -1,58 +1,48 @@
 import importlib
 
 
-def _import(typename, base_path):
-    if not typename:
-        raise ValueError
-
-    assert isinstance(typename, str), str(typename)
-    assert not base_path or isinstance(base_path, str), str(base_path)
-    def imp(typename):
+def _import(name, path):
+    def imp(tn):
         try:
-            return importlib.import_module(typename)
-
-        except ImportError as e:
-            parts = typename.split('.')
-            if len(parts) > 1:
-                module = parts.pop()
-
-                # Call import_module recursively for the parent module
-                namespace = imp('.'.join(parts))
-                try:
-                    return getattr(namespace, module)
-                except AttributeError:
-                    pass
-            raise
-
+            return importlib.import_module(tn)
         except:
-            raise ImportError(
-                'Bad path or typename', name=typename, path=base_path)
+            parts = tn.split('.')
+            if len(parts) <= 1:
+                raise
+            module = parts.pop()
 
-    if not base_path:
-        return typename, imp(typename)
-
-    if typename.startswith('.'):
-        typename = base_path + typename
-        return typename, imp(typename)
+            namespace = imp('.'.join(parts))
+            return getattr(namespace, module)
 
     try:
-        return typename, imp(typename)
+        if not path:
+            return name, imp(name)
 
+        if name.startswith('.'):
+            name = path + name
+            return name, imp(name)
+
+        try:
+            return name, imp(name)
+        except:
+            name = '%s.%s' % (path, name)
+            return name, imp(name)
     except:
-        typename = base_path + '.' + typename
-        return typename, imp(typename)
+        raise ImportError('Cannot load ' + name, name=name, path=path)
 
 
-def import_symbol(typename, base_path=None):
+def import_symbol(name=None, path=None, typename=None, base_path=None):
     """
     Import a module, or a typename within a module from its name.
 
     Arguments:
 
-    typename: An absolute or relative (starts with a .) Python path
-    base_path: If typename is relative, base_path is prepended to it.
+    name: An absolute or relative (starts with a .) Python path
+    path: If name is relative, path is prepended to it.
+    base_path: (DEPRECATED) Same as path
+    typename: (DEPRECATED) Same as path
     """
-    _, symbol = _import(typename, base_path)
+    _, symbol = _import(name or typename, path or base_path)
     return symbol
 
 
@@ -75,12 +65,13 @@ def guess_name(names, module_name, fullname):
     raise ValueError('No member specified in %s' % fullname)
 
 
-def import_code(typename, base_path=None):
-    typename, symbol = _import(typename, base_path)
+def import_code(name=None, path=None, typename=None, base_path=None):
+    name, symbol = _import(name or typename, path or base_path)
     if callable(symbol):
         return symbol
 
     candidates = vars(symbol)
     names = candidates.keys()
-    module_name = typename.split('.')[-1]
-    return candidates[guess_name(names, module_name, typename)]
+    module_name = name.split('.')[-1]
+
+    return candidates[guess_name(names, module_name, name)]

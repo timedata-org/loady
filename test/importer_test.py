@@ -6,7 +6,7 @@ from test.sub import foo
 
 class ImporterTest(unittest.TestCase):
     def test_empty(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(Exception):
             import_symbol('')
 
     def test_single(self):
