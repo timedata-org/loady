@@ -19,14 +19,14 @@ def _import(name, path):
             return name, imp(name)
 
         if name.startswith('.'):
-            name = path + name
-            return name, imp(name)
+            pname = path + name
+            return pname, imp(pname)
 
         try:
             return name, imp(name)
         except:
-            name = '%s.%s' % (path, name)
-            return name, imp(name)
+            pname = '%s.%s' % (path, name)
+            return pname, imp(pname)
     except:
         raise ImportError('Cannot load ' + name, name=name, path=path)
 
