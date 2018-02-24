@@ -28,7 +28,8 @@ def _import(name, path):
             pname = '%s.%s' % (path, name)
             return pname, imp(pname)
     except:
-        raise ImportError('Cannot load ' + name, name=name, path=path)
+        msg = "Cannot import symbol '%s'" % name
+        raise ImportError(msg, name=name, path=path)
 
 
 def import_symbol(name=None, path=None, typename=None, base_path=None):
