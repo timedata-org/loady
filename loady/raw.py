@@ -41,6 +41,7 @@ def raw(url):
             return ('https://gist.githubusercontent.com' +
                     raw_links[0].attrs['href'])
     except Exception as e:
+        print('Failed open and parse', url, e)
         pass
 
     # https: /     /github.com/user/ project/ blob/ master/tox.ini

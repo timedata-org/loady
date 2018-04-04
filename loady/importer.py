@@ -68,11 +68,12 @@ def guess_name(names, module_name, fullname):
 
 def import_code(name=None, path=None, typename=None, base_path=None):
     name, symbol = _import(name or typename, path or base_path)
-    if callable(symbol):
-        return symbol
 
-    candidates = vars(symbol)
-    names = candidates.keys()
-    module_name = name.split('.')[-1]
+    while not callable(symbol):
+        candidates = vars(symbol)
+        names = candidates.keys()
+        module_name = name.split('.')[-1]
 
-    return candidates[guess_name(names, module_name, name)]
+        symbol = candidates[guess_name(names, module_name, name)]
+
+    return symbol

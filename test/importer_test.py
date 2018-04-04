@@ -2,6 +2,7 @@ import unittest
 
 from loady.importer import import_code, import_symbol
 from test.sub import foo
+from test.sub.bar import bar
 
 
 class ImporterTest(unittest.TestCase):
@@ -34,6 +35,9 @@ class ImporterTest(unittest.TestCase):
     def test_longer(self):
         self.assertIs(import_symbol('test.sub.foo'), foo)
         self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
+
+    def test_multi(self):
+        self.assertIs(import_code('test.sub.bar'), bar.Bar)
 
     def test_base_path(self):
         self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
