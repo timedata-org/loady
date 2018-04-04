@@ -61,12 +61,12 @@ def load_location(url, base_path=None, module=False):
 
 
 @functools.lru_cache()
-def load_code(name, base_path=None):
+def load_code(name, base_path=None, recurse=False):
     """Load executable code from a URL or a path"""
     if '/' in name:
         return load_location(name, base_path, module=False)
 
-    return importer.import_code(name, base_path)
+    return importer.import_code(name, base_path, recurse)
 
 
 @functools.lru_cache()
