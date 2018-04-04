@@ -66,7 +66,8 @@ def guess_name(names, module_name, fullname):
     raise ValueError('No member specified in %s' % fullname)
 
 
-def import_code(name=None, path=None, typename=None, base_path=None):
+def import_code(
+        name=None, path=None, typename=None, base_path=None, recurse=False):
     name, symbol = _import(name or typename, path or base_path)
 
     while not callable(symbol):
@@ -75,5 +76,7 @@ def import_code(name=None, path=None, typename=None, base_path=None):
         module_name = name.split('.')[-1]
 
         symbol = candidates[guess_name(names, module_name, name)]
+        if not recurse:
+            return symbol
 
     return symbol

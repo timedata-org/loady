@@ -37,7 +37,8 @@ class ImporterTest(unittest.TestCase):
         self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
 
     def test_multi(self):
-        self.assertIs(import_code('test.sub.bar'), bar.Bar)
+        self.assertIs(import_code('test.sub.bar'), bar)
+        self.assertIs(import_code('test.sub.bar', recurse=True), bar.Bar)
 
     def test_base_path(self):
         self.assertIs(import_symbol('test.sub.foo.Bar'), foo.Bar)
