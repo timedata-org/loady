@@ -8,15 +8,12 @@ class RawTest(unittest.TestCase):
             self.assertEqual(i, raw(i))
 
     def test_examples(self):
-        for before, after in EXAMPLES:
+        for i, (before, after) in enumerate(EXAMPLES):
+            print(i, before, after)
             self.assertEqual(after, raw(before))
 
 
 EXAMPLES = (
-    ('https://gist.github.com/rec/adb4bc48080a6505e73b945c1178f614',
-     'https://gist.githubusercontent.com/rec/adb4bc48080a6505e73b945c1178f614'
-     '/raw/55c99dbc774be86a1ec163c244a4ef94c31b5420/larsen-scanner.json'),
-
     ('https://github.com/ManiacalLabs/BiblioPixel/blob/master/tox.ini',
      'https://raw.githubusercontent.com/ManiacalLabs/BiblioPixel/master/tox.ini'
      ),
@@ -30,4 +27,9 @@ EXAMPLES = (
 
     ('https://gitlab.com/ase/ase/blob/master/ase/geometry/distance.py',
      'https://gitlab.com/ase/ase/raw/master/ase/geometry/distance.py'),
+
+    # Github won't serve that page to me any more??
+    # ('https://gist.github.com/rec/adb4bc48080a6505e73b945c1178f614',
+    #  'https://gist.githubusercontent.com/rec/adb4bc48080a6505e73b945c1178f614'
+    #  '/raw/55c99dbc774be86a1ec163c244a4ef94c31b5420/larsen-scanner.json'),
 )
