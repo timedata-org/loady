@@ -66,7 +66,7 @@ def load_code(name, base_path=None, recurse=False):
     if '/' in name:
         return load_location(name, base_path, module=False)
 
-    return importer.import_code(name, base_path, recurse)
+    return importer.import_code(name, base_path, recurse=recurse)
 
 
 @functools.lru_cache()
