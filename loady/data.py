@@ -2,6 +2,11 @@ import functools, json, os, requests
 from . import raw, whitelist
 
 
+def load(location, use_json=None, use_cache=False):
+    loader = load_with_cache if use_cache else load_uncached
+    return loader(location, use_json)
+
+
 def load_uncached(location, use_json=None):
     """
     Return data at either a file location or at the raw version of a
@@ -43,5 +48,5 @@ def load_uncached(location, use_json=None):
         raise
 
 
-load = functools.lru_cache()(load_uncached)
-cache_clear = load.cache_clear
+load_with_cache = functools.lru_cache()(load_uncached)
+cache_clear = load_with_cache.cache_clear
