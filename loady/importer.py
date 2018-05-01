@@ -63,6 +63,8 @@ def guess_name(names, module_name, fullname):
     if len(matches) == 1:
         return matches[0]
 
+    names.sort()
+    matches.sort()
     raise ValueError(GUESS_ERROR.format(**locals()))
 
 
