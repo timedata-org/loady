@@ -67,5 +67,15 @@ class ImporterTest(unittest.TestCase):
         self.assertTrue(import_code('test.sub.modules.single')())
         self.assertTrue(import_code('test.sub.modules.underscore')())
         self.assertTrue(import_code('test.sub.modules.under_score')())
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as e:
             import_code('test.sub.modules.ambiguous')
+        errors = e.exception.args[0].strip().splitlines()
+        self.assertEquals(errors, IMPORT_EXCEPTION)
+
+
+IMPORT_EXCEPTION = [
+    "No member specified in fullname = test.sub.modules.ambiguous:",
+    "names = ['AMBIG_UOUS', 'Ambiguous']",
+    "module_name = ambiguous",
+    "matches = ['AMBIG_UOUS', 'Ambiguous']",
+]

@@ -63,7 +63,7 @@ def guess_name(names, module_name, fullname):
     if len(matches) == 1:
         return matches[0]
 
-    raise ValueError('No member specified in %s' % fullname)
+    raise ValueError(GUESS_ERROR.format(**locals()))
 
 
 def import_code(
@@ -80,3 +80,11 @@ def import_code(
             return symbol
 
     return symbol
+
+
+GUESS_ERROR = """
+No member specified in fullname = {fullname}:
+names = {names}
+module_name = {module_name}
+matches = {matches}
+"""
