@@ -61,4 +61,4 @@ class LoadTest(unittest.TestCase):
 
     def test_imports(self):
         self.assertIs(mock_load('math.log'), math.log)
-        self.assertIs(mock_load('test.code_test.LoadTest'), LoadTest)
+        self.assertIs(mock_load('test.loady.code_test.LoadTest'), LoadTest)
