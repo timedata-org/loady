@@ -1,5 +1,8 @@
-import functools, json, os, requests
+import functools, os, requests, yaml
 from . import raw, whitelist
+
+SUFFIXES = '.json', '.yml', '.yaml'
+
 
 
 def load(location, use_json=None, use_cache=False):
@@ -17,8 +20,8 @@ def load_uncached(location, use_json=None):
 
     A URL location is anything that's not a file location.
 
-    If the URL ends in .json and `json != False`, or `json == True`,
-    convert the data from JSON.
+    If the URL ends in .json, .yml or .yaml and `json != False`,
+    or `json == True`, convert the data from YAML or JSON.
     """
     if not whitelist.is_file(location):
         r = requests.get(raw.raw(location))
@@ -36,13 +39,13 @@ def load_uncached(location, use_json=None):
             raise
 
     if use_json is None:
-        use_json = location.endswith('.json')
+        use_json = any(location.endswith(s) for s in SUFFIXES)
 
     if not use_json:
         return data
 
     try:
-        return json.loads(data)
+        return yaml.load(data)
     except Exception as e:
         e.args = ('There was a JSON error in the file', location) + e.args
         raise
