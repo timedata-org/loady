@@ -4,7 +4,6 @@ from . import raw, whitelist
 SUFFIXES = '.json', '.yml', '.yaml'
 
 
-
 def load(location, use_json=None, use_cache=False):
     loader = load_with_cache if use_cache else load_uncached
     return loader(location, use_json)
