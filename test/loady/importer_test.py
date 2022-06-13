@@ -70,7 +70,7 @@ class ImporterTest(unittest.TestCase):
         with self.assertRaises(ValueError) as e:
             import_code('test.sub.modules.ambiguous')
         errors = e.exception.args[0].strip().splitlines()
-        self.assertEquals(errors, IMPORT_EXCEPTION)
+        self.assertEqual(errors, IMPORT_EXCEPTION)
 
 
 IMPORT_EXCEPTION = [

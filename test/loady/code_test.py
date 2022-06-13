@@ -33,24 +33,24 @@ def mock_load(url, base_path=None):
 
 class LoadTest(unittest.TestCase):
     def test_trivial(self):
-        self.assertEquals(mock_load('http://foo/bar/trivial'), 1)
+        self.assertEqual(mock_load('http://foo/bar/trivial'), 1)
 
     def test_simple(self):
-        self.assertEquals(mock_load('http://foo/bar/simple').MEMBER, 4)
-        self.assertEquals(mock_load('http://foo/bar/simple.Sim_Ple.MEMBER'), 4)
-        self.assertEquals(mock_load('http://foo/bar/simple.FOO'), 1)
+        self.assertEqual(mock_load('http://foo/bar/simple').MEMBER, 4)
+        self.assertEqual(mock_load('http://foo/bar/simple.Sim_Ple.MEMBER'), 4)
+        self.assertEqual(mock_load('http://foo/bar/simple.FOO'), 1)
 
     def test_py(self):
-        self.assertEquals(mock_load('http://foo/bar/simple.py').MEMBER, 4)
-        self.assertEquals(mock_load('http://foo/bar/simple.py.py'), 7)
-        self.assertEquals(mock_load('http://foo/bar/simple.Sim_Ple.py'), 3)
-        self.assertEquals(mock_load('http://foo/bar/simple.py.Sim_Ple.py'), 3)
+        self.assertEqual(mock_load('http://foo/bar/simple.py').MEMBER, 4)
+        self.assertEqual(mock_load('http://foo/bar/simple.py.py'), 7)
+        self.assertEqual(mock_load('http://foo/bar/simple.Sim_Ple.py'), 3)
+        self.assertEqual(mock_load('http://foo/bar/simple.py.Sim_Ple.py'), 3)
 
     def test_base_path(self):
-        self.assertEquals(mock_load('bar/trivial', 'http://foo'), 1)
-        self.assertEquals(mock_load('/bar/simple', 'http://foo').MEMBER, 4)
-        self.assertEquals(mock_load('/bar/simple.FOO', 'http://foo/'), 1)
-        self.assertEquals(mock_load('bar/simple.py', 'http://foo/').MEMBER, 4)
+        self.assertEqual(mock_load('bar/trivial', 'http://foo'), 1)
+        self.assertEqual(mock_load('/bar/simple', 'http://foo').MEMBER, 4)
+        self.assertEqual(mock_load('/bar/simple.FOO', 'http://foo/'), 1)
+        self.assertEqual(mock_load('bar/simple.py', 'http://foo/').MEMBER, 4)
 
     def test_error(self):
         with self.assertRaises(ImportError):

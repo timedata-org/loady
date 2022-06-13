@@ -51,7 +51,7 @@ def load_location(url, base_path=None, module=False):
 
     try:
         result = local[first]
-    except:
+    except KeyError:
         raise AttributeError(first)
 
     for r in rest:

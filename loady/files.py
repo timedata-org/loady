@@ -12,8 +12,8 @@ def sanitize(value):
 
     value = unicodedata.normalize('NFKD', value)
     value = value.strip()
-    value = re.sub('[^./\w\s-]', '', value)
-    value = re.sub('[-\s]+', '-', value)
+    value = re.sub(r'[^./\w\s-]', '', value)
+    value = re.sub(r'[-\s]+', '-', value)
 
     return value
 
