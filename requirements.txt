@@ -1,3 +1,4 @@
+wheel
 GitPython
 beautifulsoup4
 requests
