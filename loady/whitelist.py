@@ -109,12 +109,11 @@ If you are sure you want this to happen, if you completely trust
 and download the code.
 
 Do you want to whitelist https://{provider}/{user}/{project}? (yN)""",
-
     """
 DANGER:
 
 
 Are you SURE you want to whitelist https://{provider}/{user}/{project}?
 
-Any malicious code they write could destroy all your files!? (yN) """
+Any malicious code they write could destroy all your files!? (yN) """,
 ]

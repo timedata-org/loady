@@ -68,9 +68,7 @@ def guess_name(names, module_name, fullname):
     raise ValueError(GUESS_ERROR.format(**locals()))
 
 
-def import_code(
-    name=None, path=None, typename=None, base_path=None, recurse=False
-):
+def import_code(name=None, path=None, typename=None, base_path=None, recurse=False):
     name, symbol = _import(name or typename, path or base_path)
 
     while not callable(symbol):

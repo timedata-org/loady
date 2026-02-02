@@ -21,6 +21,7 @@ class TestLoader(importlib.abc.SourceLoader):
 
 # class TestFinder(importlib.abc.MetaPathFinder):
 
+
 def install():
     f = RedirectFinder('loady.remote', '/development/loady/loady/test')
     sys.meta_path.insert(0, f)
@@ -29,4 +30,5 @@ def install():
 if __name__ == '__main__':
     install()
     from loady.remote import toast
+
     print(toast.TOAST)

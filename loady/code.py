@@ -23,7 +23,7 @@ def load_location(url, base_path=None, module=False):
             url = base_path[:-1] + url
 
     slash = url.rfind('/')
-    url_root, filepath = url[:slash + 1], url[slash + 1:]
+    url_root, filepath = url[: slash + 1], url[slash + 1 :]
     filename, *python_path = filepath.split('.')
 
     whitelist.check_url(url_root)

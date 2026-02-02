@@ -25,16 +25,16 @@ def load_uncached(location, use_json=None):
     if not whitelist.is_file(location):
         r = requests.get(raw.raw(location))
         if not r.ok:
-            raise ValueError('Couldn\'t read %s with code %s:\n%s' %
-                             (location, r.status_code, r.text))
+            raise ValueError(
+                "Couldn't read %s with code %s:\n%s" % (location, r.status_code, r.text)
+            )
         data = r.text
     else:
         try:
             f = os.path.realpath(os.path.abspath(os.path.expanduser(location)))
             data = open(f).read()
         except Exception as e:
-            e.args = (
-                'There was an error reading the file', location, f) + e.args
+            e.args = ('There was an error reading the file', location, f) + e.args
             raise
 
     if use_json is None:

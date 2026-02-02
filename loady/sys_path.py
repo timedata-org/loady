@@ -17,7 +17,7 @@ def extend(path=None, cache=None):
 @contextlib.contextmanager
 def extender(path=None, cache=None):
     """A context that temporarily extends sys.path and reverts it after the
-       context is complete."""
+    context is complete."""
     old_path = sys.path[:]
     extend(path, cache=None)
 

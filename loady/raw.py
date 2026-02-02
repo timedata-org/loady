@@ -38,8 +38,7 @@ def raw(url):
         if parts[2] == 'gist.github.com' and '.' not in parts[:-1]:
             soup = BeautifulSoup(requests.get(url).text, 'html.parser')
             raw_links = [i for i in soup.find_all('a') if i.text == 'Raw']
-            return ('https://gist.githubusercontent.com' +
-                    raw_links[0].attrs['href'])
+            return 'https://gist.githubusercontent.com' + raw_links[0].attrs['href']
     except Exception as e:
         print('Failed open and parse', url, e)
         pass

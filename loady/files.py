@@ -21,7 +21,7 @@ def sanitize(value):
 @contextlib.contextmanager
 def remove_on_exception(dirname, remove=True):
     """Creates a directory, yields to the caller, and removes that directory
-       if an exception is thrown."""
+    if an exception is thrown."""
     os.makedirs(dirname)
     try:
         yield

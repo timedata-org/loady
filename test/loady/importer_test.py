@@ -74,8 +74,8 @@ class ImporterTest(unittest.TestCase):
 
 
 IMPORT_EXCEPTION = [
-    "No member specified in fullname = test.sub.modules.ambiguous:",
+    'No member specified in fullname = test.sub.modules.ambiguous:',
     "names = ['AMBIG_UOUS', 'Ambiguous']",
-    "module_name = ambiguous",
+    'module_name = ambiguous',
     "matches = ['AMBIG_UOUS', 'Ambiguous']",
 ]
