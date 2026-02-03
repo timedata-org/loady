@@ -1,6 +1,6 @@
 [project]
 name = "loady"
-version = "1.8.12"
+version = "1.9.0"
 description = "🛍 Load Python code and data from git 🛍"
 authors = [{ name = "Tom Ritchford", email = "tom@swirly.com" }]
 requires-python = ">=3.10"
