@@ -1,6 +1,5 @@
-import json, requests
+import requests
 from bs4 import BeautifulSoup
-
 
 URL_REWRITERS = {
     'github.com': {
@@ -46,7 +45,7 @@ def raw(url):
     # https: /     /github.com/user/ project/ blob/ master/tox.ini
     try:
         protocol, empty, provider, user, project, _, *rest = url.split('/')
-    except:
+    except Exception:
         return url
 
     rewriter = URL_REWRITERS.get(provider)

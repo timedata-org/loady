@@ -1,4 +1,5 @@
-import contextlib, unittest
+import unittest
+
 from loady import whitelist
 
 WHITELIST = [

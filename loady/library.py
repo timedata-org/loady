@@ -1,9 +1,11 @@
-import os, shutil
+import os
+import shutil
+
 from . import config, files, whitelist
 
 try:
     import git
-except:
+except ImportError:
     git = None
 
 
@@ -18,7 +20,7 @@ def clear(prompt=True, cache=None):
     return True
 
 
-class Library(object):
+class Library:
     """Represents a single Python library loaded from a git repository."""
 
     GIT_URL = 'https://:@{provider}/{user}/{project}.git'
@@ -49,7 +51,7 @@ class Library(object):
     def load(self):
         """Load the library."""
         if not git:
-            raise EnvironmentError(MISSING_GIT_ERROR)
+            raise OSError(MISSING_GIT_ERROR)
 
         if os.path.exists(self.path):
             if not config.CACHE_DISABLE:

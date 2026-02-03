@@ -1,4 +1,8 @@
-import contextlib, os, re, shutil, unicodedata
+import contextlib
+import os
+import re
+import shutil
+import unicodedata
 
 
 def canonical(filename):

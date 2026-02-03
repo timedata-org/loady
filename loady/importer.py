@@ -5,7 +5,7 @@ def _import(name, path):
     def imp(tn):
         try:
             return importlib.import_module(tn)
-        except:
+        except Exception:
             parts = tn.split('.')
             if len(parts) <= 1:
                 raise
@@ -24,12 +24,12 @@ def _import(name, path):
 
         try:
             return name, imp(name)
-        except:
-            pname = '%s.%s' % (path, name)
+        except Exception:
+            pname = f'{path}.{name}'
             return pname, imp(pname)
-    except:
+    except Exception:
         msg = "Cannot import symbol '%s'" % name
-        raise ImportError(msg, name=name, path=path)
+        raise ImportError(msg, name=name, path=path) from None
 
 
 def import_symbol(name=None, path=None, typename=None, base_path=None):

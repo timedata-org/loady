@@ -1,4 +1,7 @@
-import os, itertools, json
+import itertools
+import json
+import os
+
 from . import config
 
 """
@@ -86,8 +89,8 @@ def check_url(url):
         protocol, nothing, provider, user, project = url.split('/', 5)
         if not nothing:
             raise ValueError
-    except:
-        raise ValueError('Cannot understand URL', url)
+    except Exception:
+        raise ValueError('Cannot understand URL', url) from None
 
     check_entry(provider, user, project)
 

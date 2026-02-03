@@ -1,4 +1,9 @@
-import functools, os, requests, yaml
+import functools
+import os
+
+import requests
+import yaml
+
 from . import raw, whitelist
 
 SUFFIXES = '.json', '.yml', '.yaml'
@@ -26,7 +31,9 @@ def load_uncached(location, use_json=None):
         r = requests.get(raw.raw(location))
         if not r.ok:
             raise ValueError(
-                "Couldn't read %s with code %s:\n%s" % (location, r.status_code, r.text)
+                "Couldn't read {} with code {}:\n{}".format(
+                    location, r.status_code, r.text
+                )
             )
         data = r.text
     else:
@@ -50,5 +57,5 @@ def load_uncached(location, use_json=None):
         raise
 
 
-load_with_cache = functools.lru_cache()(load_uncached)
+load_with_cache = functools.lru_cache(load_uncached)
 cache_clear = load_with_cache.cache_clear

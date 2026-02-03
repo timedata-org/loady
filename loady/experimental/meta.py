@@ -1,4 +1,6 @@
-import importlib.abc, importlib.machinery, sys
+import importlib.abc
+import importlib.machinery
+import sys
 
 
 class RedirectFinder(importlib.machinery.PathFinder):

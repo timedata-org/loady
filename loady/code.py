@@ -1,4 +1,5 @@
 import functools
+
 from . import data, importer, whitelist
 
 
@@ -52,7 +53,7 @@ def load_location(url, base_path=None, module=False):
     try:
         result = local[first]
     except KeyError:
-        raise AttributeError(first)
+        raise AttributeError(first) from None
 
     for r in rest:
         result = getattr(result, r)
@@ -60,7 +61,7 @@ def load_location(url, base_path=None, module=False):
     return result
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def load_code(name, base_path=None, recurse=False):
     """Load executable code from a URL or a path"""
     if '/' in name:
@@ -69,7 +70,7 @@ def load_code(name, base_path=None, recurse=False):
     return importer.import_code(name, base_path, recurse=recurse)
 
 
-@functools.lru_cache()
+@functools.lru_cache
 def load(name, base_path=None):
     """Load a module from a URL or a path"""
     if '/' in name:

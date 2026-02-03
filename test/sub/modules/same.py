@@ -7,4 +7,4 @@ def Same():
 
 
 def SAME():
-    False
+    return False

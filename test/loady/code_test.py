@@ -1,5 +1,7 @@
-import math, unittest
-from loady import code, config, data, whitelist
+import math
+import unittest
+
+from loady import code, config
 
 SIMPLE_FILE = """
 FOO = 1

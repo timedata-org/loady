@@ -1,4 +1,6 @@
-import contextlib, sys
+import contextlib
+import sys
+
 from . import config, library
 
 
@@ -8,7 +10,7 @@ def extend(path=None, cache=None):
         path = config.PATH
     try:
         path = path.split(':')
-    except:
+    except Exception:
         pass
 
     sys.path.extend([library.to_path(p, cache) for p in path])
